@@ -2,14 +2,10 @@ echo "Himabindu Kumdam"
 mkdir himabindu
 mkdir Biocomputing && cd Biocomputing
 wget https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.fna https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.gbk https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.gbk
-
-
-
 mv wildtype.fna himabindu
 rm wildtype.gbk.1 
-
-
-
+grep 'tatatata' wildtype.fna
+grep 'tatatata' wildtype.fna > mutant.txt
 sed -n '/^ORIGIN/,/^\/\//p' wildtype.gbk | grep -v '^ORIGIN\|^\/\/' | wc -l
 grep '^LOCUS' wildtype.gbk | awk '{print $3}'
 grep '^SOURCE' wildtype.gbk | awk '{print $2, $3}'
