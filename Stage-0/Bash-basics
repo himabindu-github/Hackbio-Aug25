@@ -11,3 +11,23 @@ grep '^LOCUS' wildtype.gbk | awk '{print $3}'
 grep '^SOURCE' wildtype.gbk | awk '{print $2, $3}'
 grep '/gene="' wildtype.gbk | cut -d'"' -f2
 clear && history
+
+
+
+
+
+conda create -n funtools python=3.10
+conda activate funtools
+sudo apt install figlet
+figlet himabindu
+conda install bwa blast samtools bedtools bcftools fastp multiqc
+conda install spades.py
+#PackagesNotFoundError: The following packages are not available from current channels:
+
+ # - spades.py
+
+#Current channels:
+
+ # - https://conda.anaconda.org/conda-forge
+  #- https://conda.anaconda.org/bioconda
+  #- defaults
