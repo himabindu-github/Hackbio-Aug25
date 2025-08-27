@@ -1,0 +1,4 @@
+echo "Himabindu Kumdam"
+mkdir himabindu
+mkdir Biocomputing && cd Biocomputing
+wget https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.fna
