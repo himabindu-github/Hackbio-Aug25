@@ -29,7 +29,7 @@ conda config --add channels conda-forge
 conda create -n funtools python=3.10
 conda activate funtools
 
-#installing tools using apt/conda
+#installing bioinformatics tools using apt/conda
 sudo apt install figlet
 figlet himabindu
 conda install bwa blast samtools bedtools bcftools fastp multiqc
