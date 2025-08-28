@@ -2,7 +2,7 @@ echo "Himabindu Kumdam"
 mkdir himabindu
 mkdir Biocomputing && cd Biocomputing
 wget https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.fna https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.gbk https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.gbk
-mv wildtype.fna himabindu
+mv wildtype.fna ~/path/to/hackbio_bash/himabindu/
 rm wildtype.gbk.1 
 grep 'tatatata' wildtype.fna
 grep 'tatatata' wildtype.fna > mutant.txt
@@ -11,13 +11,25 @@ grep '^LOCUS' wildtype.gbk | awk '{print $3}'
 grep '^SOURCE' wildtype.gbk | awk '{print $2, $3}'
 grep '/gene="' wildtype.gbk | cut -d'"' -f2
 clear && history
+ls himabindu Biocomputing
 
-
-
-
-
+## Miniconda installation and Conda environment configuration. 
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+conda --version
+conda init
+conda init $SHELL
+ls ~/miniconda3/bin/conda
+export PATH="/home/khbiitm/miniconda3/bin:$PATH"
+conda activate base
+conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+ 
+#create a new environment and activate it
 conda create -n funtools python=3.10
 conda activate funtools
+
+#installing tools using apt/conda
 sudo apt install figlet
 figlet himabindu
 conda install bwa blast samtools bedtools bcftools fastp multiqc
