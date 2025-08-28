@@ -21,13 +21,5 @@ conda activate funtools
 sudo apt install figlet
 figlet himabindu
 conda install bwa blast samtools bedtools bcftools fastp multiqc
-conda install spades.py
-#PackagesNotFoundError: The following packages are not available from current channels:
+conda install -c bioconda spades
 
- # - spades.py
-
-#Current channels:
-
- # - https://conda.anaconda.org/conda-forge
-  #- https://conda.anaconda.org/bioconda
-  #- defaults
