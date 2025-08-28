@@ -5,7 +5,7 @@ mkdir Biocomputing && cd Biocomputing
 wget https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.fna https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.gbk https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.gbk
 mv wildtype.fna ~/path/to/hackbio_bash/himabindu/
 rm wildtype.gbk.1 
-grep 'tatatata' wildtype.fna
+grep 'tatatata' wildtype.fna | wc -l
 grep 'tatatata' wildtype.fna > mutant.txt
 # '>' redirects the output of command to a new file
 
