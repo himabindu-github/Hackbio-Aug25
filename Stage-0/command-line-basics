@@ -45,4 +45,4 @@ sudo apt install figlet
 figlet himabindu
 conda install bwa blast samtools bedtools bcftools fastp multiqc
 conda install -c bioconda spades
-
+##LinkedIn: https://github.com/himabindu-github/Hackbio-Aug25/tree/main
