@@ -1,8 +1,8 @@
-# Stage-0 summary
+# 🧬 Stage-0 summary
 This HackBio Internship is designed to provide hands-on experience in Next-Generation Sequencing (NGS) data analysis. In Stage 0, the focus was on building foundational skills in the Linux command line and setting up software environments essential for bioinformatics workflows.
 This stage includes two structured projects that provide a solid starting point for working in Unix/Linux environments.
-## Project 1 introduced essential command-line tools used daily in bioinformatics and data processing.
-### Navigating and Managing Files
+## 💻 Project 1 introduced essential command-line tools used daily in bioinformatics and data processing.
+### 📁 Navigating and Managing Files
 
 - pwd – Print current directory
 
@@ -16,7 +16,7 @@ This stage includes two structured projects that provide a solid starting point 
 
 - touch – Create empty files
 
-### Viewing and Editing Text
+### 📝 Viewing and Editing Text
 
 - cat – Display file contents
 
@@ -28,7 +28,7 @@ This stage includes two structured projects that provide a solid starting point 
 
 - grep – Search text using patterns
 
-## Project 2: Environment Setup with Conda
+## 🔧 Project 2: Environment Setup with Conda
 
 The second project focused on installing and configuring Conda, a powerful tool for managing packages and environments in bioinformatics.
 
