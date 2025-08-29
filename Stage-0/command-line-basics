@@ -16,6 +16,13 @@ grep 'tatatata' wildtype.fna > mutant.txt
 # '>' redirects the output of command to a new file
 
 sed -n '/^ORIGIN/,/^\/\//p' wildtype.gbk | grep -v '^ORIGIN\|^\/\/' | wc -l
+# sed extracts lines between 'ORIGIN' and '//': the actual sequence
+# -n no printing by default
+# p says print the extracted lines
+# the output is piped  '|' to grep
+# grep -v excludes the pattern '^ORIGIN\|^\/\/' means exclude lines starting with ORIGIN or //
+# wc -l counts the number of lines
+
 
 grep '^LOCUS' wildtype.gbk | awk '{print $3}'
 # grep matches line having 'LOCUS' and awk prints the 3rd field in that line
