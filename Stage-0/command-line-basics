@@ -11,6 +11,11 @@ rm wildtype.gbk.1
 grep 'tatatata' wildtype.fna 
 ## grep 'tatatata' wildtype.fna | wc -l ; output 13
 ## grep 'tatatata' wildtype.gbk | wc -l ; output 4. Hence, wildtype.fna is likely a mutant.
+## grep 'tata' wildtype.gbk | wc -l ; 898
+## grep 'tata' wildtype.fna | wc -l ; 1117. increase in count due to overlapping matches within the tatatata sequences.
+
+
+
 
 grep 'tatatata' wildtype.fna > mutant.txt
 # '>' redirects the output of command to a new file
