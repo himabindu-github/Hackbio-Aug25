@@ -1,19 +1,29 @@
 ## project 1
 echo "Himabindu Kumdam"
 mkdir himabindu
+# check with ls
+
 mkdir Biocomputing && cd Biocomputing
+# check with ls & pwd
 
 wget https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.fna https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.gbk https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.gbk
+# url1="https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.fna"
+# url2="https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.gbk"
+# url3="https://raw.githubusercontent.com/josoga2/dataset-repos/main/wildtype.gbk"
+# wget url1 url2 url3 : for better readability
 
 mv wildtype.fna ~/path/to/hackbio_bash/himabindu/
+# mv for moving and renaming. check with ls
+
 rm wildtype.gbk.1 
+# rm removes
 
 grep 'tatatata' wildtype.fna 
 ## grep 'tatatata' wildtype.fna | wc -l ; output 13
 ## grep 'tatatata' wildtype.gbk | wc -l ; output 4. Hence, wildtype.fna is likely a mutant.
 ## grep 'tata' wildtype.gbk | wc -l ; 898
 ## grep 'tata' wildtype.fna | wc -l ; 1117. increase in count due to overlapping matches within the tatatata sequences.
-
+## grep --color=always 'tatatata' wildtype.fna : highlights matches 
 
 
 
@@ -30,16 +40,20 @@ sed -n '/^ORIGIN/,/^\/\//p' wildtype.gbk | grep -v '^ORIGIN\|^\/\/' | wc -l
 
 
 grep '^LOCUS' wildtype.gbk | awk '{print $3}'
-# grep matches line having 'LOCUS' and awk prints the 3rd field in that line
+# grep matches line having 'LOCUS' and awk prints the 3rd field in that line. '^' indicates 'starts with'
 
 grep '^SOURCE' wildtype.gbk | awk '{print $2, $3}'
+# grep matches line starting with 'SOURCE' and awk prints the 2nd and 3rd field in that line
 
 grep '/gene="' wildtype.gbk | cut -d'"' -f2
 # the format in .gbk file is /gene="lacZ". grep matches lines with '/gene=' and cut splits the lines into fileds based on delimiter '"', -f2: print the second field
 # /gene="lacZ" field 1 : /gene=; field 2: lacZ; field 3:  .
 
 clear && history
+# clears terminal space and print list of all the commands typed.
+
 ls himabindu Biocomputing
+# prints a list of the contents
 
 ## project 2
 ## Miniconda installation and Conda environment configuration. 
@@ -52,22 +66,30 @@ conda init
 # conda init $SHELL
 ls ~/miniconda3/bin/conda
 export PATH="/home/khbiitm/miniconda3/bin:$PATH"
+
 conda activate base
+# activates base environment
+
 conda config --add channels defaults
 conda config --add channels bioconda
 conda config --add channels conda-forge
-*add sources for bioinformatics tools
+# add sources for bioinformatics tools
 
-#create a new environment and activate it
+# create a new environment and activate it
 conda create -n funtools python=3.10
 conda activate funtools
+# activates 'funtools' environment
 
 #installing bioinformatics tools using apt/conda
-sudo apt install figlet
+conda install -c conda-forge figlet
+
 figlet himabindu
+# prints in ASCII art
+
 conda install bwa blast samtools bedtools bcftools fastp multiqc
 # installs all the tools
 conda install -c bioconda spades
 # to check installation run samtools --version, bcftools --version etc..
 
-##LinkedIn: https://github.com/himabindu-github/Hackbio-Aug25/tree/main
+##Github: https://github.com/himabindu-github/Hackbio-Aug25/tree/main
+## LinkedIn: https://www.linkedin.com/feed/update/urn:li:activity:7367374945166753792/
