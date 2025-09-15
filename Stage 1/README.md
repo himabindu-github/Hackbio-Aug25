@@ -13,7 +13,7 @@ Between 2017 and 2018, South Africa experienced a severe Listeriosis outbreak. T
 
 ## The Workflow
 ### Step 1: Data Download & Setup
-This step involves collecting the raw sequencing data files (.fastq.gz) from a public repository (hackbio platform, in this case) using automated download commands. Organizing these files into a dedicated directory is essential for efficient management and downstream processing. Properly naming and storing the files ensures traceability and prevents data loss, which is crucial when handling large datasets with many samples.
+This step involves collecting the raw sequencing data files (.fastq.gz) from a public repository (hackbio platform, in this case) using automated download commands. Organizing your files in a specific folder with clear names makes it easier to manage your data and avoid confusion. This is especially helpful when working with lots of samples, as it ensures everything is easy to find and use for later steps.
 -	Input: List of curl commands to download .fastq.gz files from ENA
 -	Tool: Custom bash script to read commands, assign filenames, and save to raw_data_wgs/ directory
 -	Outcome: Organized 100+ sequencing files ready for analysis
