@@ -34,6 +34,25 @@ After applying fastp for adapter removal and quality trimming, we reassessed the
 #### Note on QC Warnings
 The sequencing in this Listeria monocytogenes outbreak study was performed using the Nextera XT DNA Library Prep Kit, which uses tagmentation to simultaneously fragment DNA and add adapters. While efficient, this method can introduce sequence bias in the first ~12 bases of each read. As a result, QC tools like FastQC often generate warnings in the “Per base sequence content” module. These warnings are expected and not a sign of poor sequencing quality in this context.
 
+### Step 3: Genome Assembly
+Genome assembly reconstructs the full bacterial genomes from short sequencing reads. Using tools like SPAdes, the cleaned reads are pieced together into contiguous sequences (contigs) that represent the organism’s genome. High-quality assemblies are critical for identifying genetic features such as resistance genes, virulence factors, and for accurate species typing. This step transforms fragmented raw data into meaningful genomic structures ready for analysis.
+-	Tool: SPAdes
+-	Input: Cleaned paired-end reads
+-	Output: Assembled contigs for each isolate
+-	Purpose: Reconstruct genomes for typing and gene detection
+
+### Step 4: Assembly Quality Assessment (QUAST Summary)
+Assessing assembly quality using QUAST provides metrics such as genome size, N50 (contiguity), GC content, and number of contigs. These indicators help determine how complete and reliable each genome assembly is. Identifying outliers that may indicate contamination or misassemblies is important to ensure only high-quality genomes are used for further analysis.
+•	Genome lengths: 3.02–3.13 Mb, consistent with L. monocytogenes
+•	N50 values: ~60 kb to >250 kb
+•	GC content: 37.8%–37.9%
+•	Contig counts: mostly 30–100 per sample
+•	Notable outlier: SRR27013337 likely contaminated/misclassified
+
+
+
+
+
 
 
 
