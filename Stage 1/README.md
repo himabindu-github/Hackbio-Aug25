@@ -5,5 +5,12 @@ Between 2017 and 2018, South Africa experienced a severe Listeriosis outbreak. T
 -	Identify virulence factors such as toxins
 -	Suggest effective antibiotics or treatment strategies
 
+## 🔍 Objectives
+1.	✅ Confirm the identity of the organism
+2.	🧬 Determine antimicrobial resistance (AMR) profiles
+3.	☠️ Detect potential toxins or virulence factors
+4.	💊 Recommend potential treatments based on genomic evidence
+
+
 
 
