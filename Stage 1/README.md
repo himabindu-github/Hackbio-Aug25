@@ -43,11 +43,11 @@ Genome assembly reconstructs the full bacterial genomes from short sequencing re
 
 ### Step 4: Assembly Quality Assessment (QUAST Summary)
 Assessing assembly quality using QUAST provides metrics such as genome size, N50 (contiguity), GC content, and number of contigs. These indicators help determine how complete and reliable each genome assembly is. Identifying outliers that may indicate contamination or misassemblies is important to ensure only high-quality genomes are used for further analysis.
-•	Genome lengths: 3.02–3.13 Mb, consistent with L. monocytogenes
-•	N50 values: ~60 kb to >250 kb
-•	GC content: 37.8%–37.9%
-•	Contig counts: mostly 30–100 per sample
-•	Notable outlier: SRR27013337 likely contaminated/misclassified
+-	Genome lengths: 3.02–3.13 Mb, consistent with L. monocytogenes
+-	N50 values: ~60 kb to >250 kb
+-	GC content: 37.8%–37.9%
+-	Contig counts: mostly 30–100 per sample
+-	Notable outlier: SRR27013337 likely contaminated/misclassified
 
 
 
