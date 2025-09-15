@@ -13,10 +13,29 @@ Between 2017 and 2018, South Africa experienced a severe Listeriosis outbreak. T
 
 ## The Workflow
 ### Step 1: Data Download & Setup
-This step involves collecting the raw sequencing data files (.fastq.gz) from a public repository (hackbio platform, in this case) using automated download commands. Organizing your files in a specific folder with clear names makes it easier to manage your data and avoid confusion. This is especially helpful when working with lots of samples, as it ensures everything is easy to find and use for later steps.
+This step involves collecting the raw sequencing data files (.fastq.gz) from a public repository (hackbio platform, in this case) using automated download commands. For this project, 50 samples are used. Organizing these files in a specific folder with clear names makes it easier to manage the data and avoid confusion. This is especially helpful when working with lots of samples, as it ensures everything is easy to find and use for later steps.
 -	Input: List of curl commands to download .fastq.gz files from ENA
 -	Tool: Custom bash script to read commands, assign filenames, and save to raw_data_wgs/ directory
--	Outcome: Organized 100+ sequencing files ready for analysis
+-	Outcome: Organized 50 sequencing files ready for analysis
+
+### Step 2: Quality Control
+Quality control (QC) is vital to assess the raw sequencing data's reliability. Tools like FastQC and MultiQC provide visual and statistical summaries of read quality, adapter contamination, GC content, and duplication rates. This helps identify technical issues or biases that can affect downstream analyses. If problems are detected, trimming and filtering tools such as fastp or Trimmomatic are used to improve data quality by removing adapters, low-quality bases, and duplicates. High-quality input data ensures accurate genome assembly and reliable biological interpretations.
+- Tools: FastQC, MultiQC
+-	Purpose: Evaluate raw read quality — adapter content, read length, base quality, GC content
+-	Actions: Trim adapters and low-quality bases using tools like fastp or Trimmomatic
+-	Outcome: High-quality reads passed for downstream processing
+#### Quality Control Summary
+#### Initial QC
+We analyzed raw reads from 50 samples using MultiQC, focusing on base quality, GC content, adapter contamination, and duplication levels. Most samples showed good base quality and expected GC content. However, some exhibited elevated duplication rates and minor adapter contamination—typical in outbreak datasets with closely related isolates. These results indicated the need for trimming and quality filtering before proceeding.
+
+#### Post-Trimming QC
+After applying fastp for adapter removal and quality trimming, we reassessed the data. The trimming process effectively reduced adapter content and duplication levels, while overall read quality improved across samples. This confirmed that the cleaned reads were of high quality and ready for downstream analysis.
+
+#### Note on QC Warnings
+The sequencing in this Listeria monocytogenes outbreak study was performed using the Nextera XT DNA Library Prep Kit, which uses tagmentation to simultaneously fragment DNA and add adapters. While efficient, this method can introduce sequence bias in the first ~12 bases of each read. As a result, QC tools like FastQC often generate warnings in the “Per base sequence content” module. These warnings are expected and not a sign of poor sequencing quality in this context.
+
+
+
 
 
 
