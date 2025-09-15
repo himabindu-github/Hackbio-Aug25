@@ -49,6 +49,26 @@ Assessing assembly quality using QUAST provides metrics such as genome size, N50
 -	Contig counts: mostly 30–100 per sample
 -	Notable outlier: SRR27013337 likely contaminated/misclassified
 
+### Step 5 : Kraken2 Classification for Organism Identification
+The Kraken2 taxonomic classification of 26 genome assemblies from the 2017–2018 South African listeriosis outbreak was performed to confirm sample identity and detect potential contamination.
+#### 🦠 Key Findings:
+-  Most samples showed over 70% of reads classified as Listeria monocytogenes, confirming the expected outbreak pathogen.
+-  Sample SRR27013337 had approximately 85% Micrococcus and only 12% Listeria, indicating likely contamination or mislabeling; this sample will be excluded from downstream analyses.
+-  A few samples showed minor contamination (<20%) with genera like Ralstonia and Streptococcus, which is acceptable for further analysis.
+-  Around 10–20% of reads in most samples were classified as “Other” or “Unclassified”, typical in metagenomic data.
+-  These unclassified reads are unlikely to significantly impact the analysis results.
+
+#### Conclusion and Next Steps:
+-	Exclude SRR27013337 from further analysis due to high contamination.
+-	Proceed with downstream analyses (e.g., antibiotic resistance profiling, phylogenetic reconstruction) for samples dominated by Listeria monocytogenes.
+-	Samples with moderate contamination will be flagged and monitored closely during interpretation.
+#### Additional Visualizations:
+Sankey diagrams were generated using Pavian to visualize the taxonomic breakdown of each sample. These interactive visualizations clearly show how sequence reads are distributed among bacterial taxa, making it easier to:
+-	Confirm the dominance of Listeria monocytogenes, and
+-	Detect any contaminants or unusual patterns across samples.
+
+
+
 
 
 
