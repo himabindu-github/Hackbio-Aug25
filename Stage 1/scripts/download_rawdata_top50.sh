@@ -1,38 +1,70 @@
 #!/bin/bash
 
-# Input file containing curl commands
+# =====================================
+# To download multiple files listed as curl commands in a file
+# =====================================
+
+# File that contains a list of curl commands, one per line
 URL_FILE="wgs_top_50_urls.sh"
+
+# Directory where downloaded files will be stored
 TARGET_DIR="raw_data_wgs"
 
-# Check if file exists
+# ----------------------------------------------------------
+# STEP 1: Check if the input file exists
+# -----------------------------------------------------------
 if [[ ! -f "$URL_FILE" ]]; then
-  echo " ERROR: File '$COMMANDS_FILE' not found!"
-  exit 1
-else
-  echo "File '$URL_FILE' found. Starting downloads..."
+  echo "ERROR: File '$URL_FILE' not found!"
+  exit 1                                           
+ # Exit the script if the file is not found
+  else
+  echo "File '$URL_FILE' found. Starting downloads"
 fi
 
-# Create target folder if not exists
-mkdir -p "$TARGET_DIR"
+# -----------------------------------------------------------
+# STEP 2: Create the target directory if it doesn't exist already
+# ------------------------------------------------------------
+mkdir -p "$TARGET_DIR"  
+# -p ensures no error if the directory already exists
 
-# Read and execute each curl command
+# ---------------------------------------------------------------
+# STEP 3: Loop through each line of the file
+# ---------------------------------------------------------------
+# while IFS= Read the file line-by-line, keeping the line exactly as it is without breaking it at spaces    
+# read -r says: donot interpret backslashes as escape characters
 while IFS= read -r line; do
-  # Skip empty lines or comments
+ # Skip empty lines or lines starting with #
   [[ -z "$line" || "$line" =~ ^# ]] && continue
 
-  # Extract the filename after -o
+  # -----------------------------------------------------------------
+  # STEP 4: Extract the filename from the curl command using grep
+  # look behind regex (?<=-o), looks for the string after '-o ' and [^ ]+ match all non-space      characters after -o
+  # -----------------------------------------------------------------
   OUTPUT_FILE=$(echo "$line" | grep -oP '(?<=-o )[^ ]+')
 
-  # Set new output path
-  NEW_OUTPUT="$TARGET_DIR/${OUTPUT_FILE##*/}"
+  # --------------------------------------------------------------------
+  # STEP 5: Set the full new path for the output file
+  # -------------------------------------------------------------------
+ BASENAME=$(basename "$OUTPUT_FILE")  # skips the path and keeps the file name
+ NEW_OUTPUT="$TARGET_DIR/${BASENAME}" # sets the path
 
-  # Replace original output path in command
-  MODIFIED_CMD=$(echo "$line" | sed "s|-o $OUTPUT_FILE|-o $NEW_OUTPUT|")
+  # -------------------------------------------------------------------
+  # STEP 6: the original output file in the curl command is replaced with the new one which has the path.
+  # This ensures all files are saved in the target directory
+  # ----------------------------------------------------------------------
+  MODIFIED_CURL=$(echo "$line" | sed "s|-o $OUTPUT_FILE|-o $NEW_OUTPUT|")
 
-  # Print and execute
+  # ------------------------------------------------------------------------
+  # STEP 7: Print the destination file and run the curl command
+  # -------------------------------------------------------------------------
   echo "Downloading to: $NEW_OUTPUT"
-  eval "$MODIFIED_CMD"
+  eval "$MODIFIED_CURL"      # Run the modified command using eval
 
-done < "$URL_FILE"
+done < "$URL_FILE"       # Feed the file line by line to the while loop
 
-echo "All files downloaded to $TARGET_DIR/"
+# ------------------------------------------------------------------------
+# STEP 8: Done message
+# ------------------------------------------------------------------------
+echo "All files downloaded to '$TARGET_DIR/'"
+
+
