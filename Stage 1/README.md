@@ -115,20 +115,13 @@ Most virulence genes, including those critical for infection and intracellular s
 
 ### Discussion
 
-- Our analysis shows that all Listeria monocytogenes samples come from the same strain (ST6), which is linked to meat products and can cause serious illness. This helps confirm the outbreak source and track how it spreads.
+Our analysis shows that all outbreak samples belong to the same strain of Listeria monocytogenes (ST6), confirming the outbreak came from a single source. This helps public health personnel focus their investigations and control efforts more effectively.
 
-- We found genes that make the bacteria resistant to some antibiotics like fluoroquinolone and fosfomycin, but the usual treatments for listeriosis, such as ampicillin and gentamicin, should still work. It’s important to keep monitoring for any new resistance.
+We found that the bacteria carry several genes that can make them resistant to some antibiotics like fluoroquinolones and fosfomycin. However, the usual treatments for listeriosis, such as ampicillin and gentamicin, should still work well. This should be backed by susceptibility tests, and it is important to keep monitoring the bacteria for any new resistance that might appear.
 
-- The bacteria also carry several genes that help them invade and survive inside human cells, making this strain highly virulent.
+The bacteria also have many genes that help them infect and survive inside human cells, which likely contributed to how serious this outbreak was. Understanding these virulence factors can help researchers develop better ways to detect and fight these infections.
 
-- Genomic data helps turn complex information into clear insights that public health teams can use.
-
-- Sharing this information in real-time supports outbreak response teams to track how the strain changes and spreads.
-
-- This improves decision-making for controlling the outbreak and protecting the public.
-
-- Overall, ongoing monitoring and clear communication are key to managing outbreaks, ensuring treatments remain effective, and keeping food products safe.
-
+Overall, using whole-genome sequencing gave us detailed insight into the outbreak strain’s identity, resistance, and virulence. This information supports better decision-making by public health teams, helping them track the outbreak, choose effective treatments, and prevent future cases.
 
 
 
