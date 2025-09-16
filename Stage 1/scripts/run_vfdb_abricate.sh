@@ -1,5 +1,11 @@
 #!/bin/bash
 
+#========================================
+# Run Abricate with the vfdb database on SPAdes contigs (excluding SRR27013337).
+# Results are appended to a combined TSV file with sample names prefixed.
+#====================================
+
+# Set input and outputs
 INPUT_DIR="/home/maa/himabindu/results/SPAdes_output"
 OUTPUT_FILE="/home/maa/himabindu/reports/abricate_resf_results.tsv"  # You can change this
 DB="vfdb"
