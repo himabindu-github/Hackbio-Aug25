@@ -49,8 +49,14 @@ Assessing assembly quality using QUAST provides metrics such as genome size, N50
 -	Contig counts: mostly 30–100 per sample
 -	Notable outlier: SRR27013337 likely contaminated/misclassified
 
+### Step 5 : BLAST Analysis Workflow for Confirming the Organism Identity
+To confirm the identity of the organism, I selected contigs longer than 500 base pairs from each assembled genome. These contigs were then compared against a custom Listeria reference database from NCBI using BLASTn. This process verifies that the assembled sequences match Listeria monocytogenes by identifying high similarity to reference sequences.
+- All samples, including the outlier SRR27013337, showed strong matches to Listeria monocytogenes with high identity (~94.7–95%), confirming species identity.
+- Although SRR27013337 had atypical assembly metrics in QUAST—such as fragmented contigs or irregular assembly statistics—BLAST was still able to detect Listeria sequences confidently. This is because BLAST can identify even small amounts of Listeria DNA within the sample by aligning contigs to reference genomes.
+
+
 ### Step 5 : Kraken2 Classification for Organism Identification
-The Kraken2 taxonomic classification of 26 genome assemblies from the 2017–2018 South African listeriosis outbreak was performed to confirm sample identity and detect potential contamination.
+To further investigate sample composition and clarify any contamination or mixed species presence (especially in outlier samples like SRR27013337), the next step is to run Kraken for taxonomic classification. Kraken offers fast, accurate assignment of reads to taxonomic labels, helping to confirm Listeria dominance or detect other organisms.
 #### 🦠 Key Findings:
 -  Most samples showed over 70% of reads classified as Listeria monocytogenes, confirming the expected outbreak pathogen.
 -  Sample SRR27013337 had approximately 85% Micrococcus and only 12% Listeria, indicating likely contamination or mislabeling; this sample will be excluded from downstream analyses.
