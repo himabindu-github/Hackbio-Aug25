@@ -1,3 +1,7 @@
+# This script processes Abricate vfdb output to clean and summarize virulence factor data.
+# It calculates virulence factor gene prevalence across samples and exports summary files.
+
+
 # Load necessary library
 library(dplyr)
 
