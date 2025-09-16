@@ -74,6 +74,12 @@ Sankey diagrams were generated using Pavian to visualize the taxonomic breakdown
 -	Confirm the dominance of Listeria monocytogenes, and
 -	Detect any contaminants or unusual patterns across samples.
 
+### MLST Analysis Confirms Single Source of Listeria Outbreak
+
+Multilocus Sequence Typing (MLST) was performed to understand the genetic relationship of Listeria monocytogenes from the samples in this study. This method analyzes specific housekeeping genes to identify the sequence type (ST) of bacterial strains, helping to confirm if cases are linked to the same source.
+All samples in this study were identified as Sequence Type 6 (ST6), with a consistent allelic profile across seven key genes: abcZ(3), bglA(9), cat(9), dapE(3), dat(3), ldh(1), lhkA(5). This ST6 belongs to Clonal Complex 6 (CC6), which has been previously found in meat samples and is known to be associated with foodborne outbreaks.
+The uniform presence of ST6/CC6 with this allelic profile in all samples indicates that the outbreak was caused by a single, clonal strain. This information is crucial for epidemiologists to track the spread, identify contamination sources, and develop targeted interventions to prevent future outbreaks. Using MLST improves outbreak investigation and enhances public health response by providing precise genetic information about the bacteria involved.
+
 
 
 
