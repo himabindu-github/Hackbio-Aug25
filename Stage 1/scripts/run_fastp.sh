@@ -1,34 +1,49 @@
 #!/bin/bash
 
-INPUT_DIR="raw_data_wgs"
-OUTPUT_DIR="fastp_output"
-FASTQC_RAW_DIR="fastqc_raw_output"
-FASTQC_TRIMMED_DIR="fastqc_trimmed_output"
-MULTIQC_RAW_DIR="multiqc_raw_output"
-MULTIQC_TRIMMED_DIR="multiqc_trimmed_output"
 
+#==========================================
+#This script performs quality control (QC) and read trimming for raw WGS FASTQ files using FastQC, fastp, and MultiQC.
+#==========================================
+
+# -----------------------------------------------------
+# STEP 1: Define directory paths for inputs and outputs
+# -----------------------------------------------------
+INPUT_DIR="raw_data_wgs"                         # Raw FASTQ files
+OUTPUT_DIR="fastp_output"                        # Output directory for trimmed files and fastp reports
+FASTQC_RAW_DIR="fastqc_raw_output"              # FastQC results for raw reads
+FASTQC_TRIMMED_DIR="fastqc_trimmed_output"      # FastQC results for trimmed reads
+MULTIQC_RAW_DIR="multiqc_raw_output"            # MultiQC summary for raw reads
+MULTIQC_TRIMMED_DIR="multiqc_trimmed_output"    # MultiQC summary for trimmed reads
+
+# -----------------------------------------------------
+# STEP 2: Create all necessary output directories
+# -----------------------------------------------------
 mkdir -p "$OUTPUT_DIR" "$FASTQC_RAW_DIR" "$FASTQC_TRIMMED_DIR" "$MULTIQC_RAW_DIR" "$MULTIQC_TRIMMED_DIR"
 
+# -----------------------------------------------------
+# STEP 3: Run FastQC on raw FASTQ files
+# -----------------------------------------------------
 echo "Running FastQC on raw FASTQ files..."
-
 fastqc "$INPUT_DIR"/*.fastq.gz -o "$FASTQC_RAW_DIR"
 
-echo "Performing MultiQC with fastqc_raw_outpu..."
+# -----------------------------------------------------
+# STEP 4: Run MultiQC to summarize raw FastQC reports
+# -----------------------------------------------------
+echo "Summarizing raw FastQC reports with MultiQC..."
 multiqc "$FASTQC_RAW_DIR" -o "$MULTIQC_RAW_DIR"
 
-# "Check the MultiQC report to decide trimming parameters and sample quality."
+# Check the MultiQC report to decide trimming parameters and sample quality
 
-echo "Running Fastp for read trimming..."
+# -----------------------------------------------------
+# STEP 5: Run fastp to trim raw reads
+# -----------------------------------------------------
+echo "Running fastp for read trimming..."
 
-# loop through all forward read files (-1.fastq.gz) in the input directory
 for f1 in "$INPUT_DIR"/*_1.fastq.gz; do
-  # Get the reverse read files by replacing -1 with -2
   f2="${f1/_1.fastq.gz/_2.fastq.gz}"
-
-  # retrieves the sample name for naming the output
   name=$(basename "$f1" _1.fastq.gz)
 
-  echo "🔄 Processing sample: $name"
+  echo "Processing sample: $name"
 
   fastp \
     -i "$f1" \
@@ -39,15 +54,22 @@ for f1 in "$INPUT_DIR"/*_1.fastq.gz; do
     -j "$OUTPUT_DIR/${name}_fastp.json" \
     --thread 4
 
-  echo "Done!"
-
+  echo "Done: $name"
 done
 
+# -----------------------------------------------------
+# STEP 6: Run FastQC on trimmed reads
+# -----------------------------------------------------
 echo "Running FastQC on trimmed FASTQ files..."
-
 fastqc "$OUTPUT_DIR"/*_trimmed.fastq.gz -o "$FASTQC_TRIMMED_DIR"
 
-echo "Performing MultiQC on trimmed data"
+# -----------------------------------------------------
+# STEP 7: Summarize trimmed FastQC reports with MultiQC
+# -----------------------------------------------------
+echo "Performing MultiQC..."
 multiqc "$FASTQC_TRIMMED_DIR" "$OUTPUT_DIR" -o "$MULTIQC_TRIMMED_DIR"
 
-echo "All processing completed!"
+echo "Done!"
+#echo "Check raw data QC: $MULTIQC_RAW_DIR/multiqc_report.html"
+#echo "Check trimmed data QC: $MULTIQC_TRIMMED_DIR/multiqc_report.html"
+
