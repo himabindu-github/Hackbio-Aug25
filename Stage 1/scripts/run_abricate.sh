@@ -1,21 +1,22 @@
 #!/bin/bash
 
-INPUT_DIR="SPAdes_output"
-OUTPUT_FILE="abricate_results.tsv"  # You can change this
-
-# Empty the output file first (optional)
+INPUT_DIR="/home/maa/himabindu/results/SPAdes_output"
+OUTPUT_FILE="/home/maa/himabindu/reports/abricate_resf_results.tsv"  # You can change this
+DB="card"
+# Empty the output file first
 > "$OUTPUT_FILE"
 
+# loop through each subdirectory in the input folder
 for subdir in "$INPUT_DIR"/*; do
   if [[ -d "$subdir" ]]; then
-    CONTIG_FILE="$subdir/contigs.fasta"
-    SAMPLE_NAME=$(basename "$subdir")
+    CONTIG_FILE="$subdir/contigs.fasta"     #get the contigs.fasta file and assign it to a variable CONTIG_FILE
+    SAMPLE_NAME=$(basename "$subdir")       # extract the sample name
 
     # Check if contigs.fasta exists and is not from SRR27013337
     if [[ -f "$CONTIG_FILE" && "$SAMPLE_NAME" != SRR27013337* ]]; then
       echo "Running abricate on: $SAMPLE_NAME"
 
-      abricate "$CONTIG_FILE" | sed "s/^/$SAMPLE_NAME\t/" >> "$OUTPUT_FILE"
+      abricate --db "$DB" "$CONTIG_FILE" | sed "s/^/$SAMPLE_NAME\t/" >> "$OUTPUT_FILE"
     else
       echo "Skipping: $SAMPLE_NAME"
     fi
