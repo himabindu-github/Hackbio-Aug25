@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# Path to Kraken2 database
+#========================================
+# This script runs Kraken2 on all contig FASTA files in a folder.
+# Outputs classification and report files for each sample.
+#==========================================
+
+# Path to downloaded Kraken2 database
 DB="/Volumes/Crucial X6/wgs_analysis_hackbio/minikraken_8GB_20200312"
 
 # Directory containing individual contig files
@@ -27,5 +32,5 @@ for CONTIG in "$CONTIG_DIR"/*.fasta; do
   echo "Finished $SAMPLE_NAME"
 done
 
-echo "✅ All samples processed."
+echo "All samples processed."
 
