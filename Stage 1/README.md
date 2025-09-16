@@ -55,7 +55,7 @@ To confirm the identity of the organism, I selected contigs longer than 500 base
 - Although SRR27013337 had atypical assembly metrics in QUAST—such as fragmented contigs or irregular assembly statistics—BLAST was still able to detect Listeria sequences confidently. This is because BLAST can identify even small amounts of Listeria DNA within the sample by aligning contigs to reference genomes.
 
 
-### Step 5 : Kraken2 Classification for Organism Identification
+### Step 6 : Kraken2 Classification for Organism Identification
 To further investigate sample composition and clarify any contamination or mixed species presence (especially in outlier samples like SRR27013337), the next step is to run Kraken for taxonomic classification. Kraken offers fast, accurate assignment of reads to taxonomic labels, helping to confirm Listeria dominance or detect other organisms.
 #### 🦠 Key Findings:
 -  Most samples showed over 70% of reads classified as Listeria monocytogenes, confirming the expected outbreak pathogen.
@@ -63,11 +63,12 @@ To further investigate sample composition and clarify any contamination or mixed
 -  A few samples showed minor contamination (<20%) with genera like Ralstonia and Streptococcus, which is acceptable for further analysis.
 -  Around 10–20% of reads in most samples were classified as “Other” or “Unclassified”, typical in metagenomic data.
 -  These unclassified reads are unlikely to significantly impact the analysis results.
+Samples with moderate contamination will be included in downstream analyses such as antibiotic resistance profiling and sequence typing, but with caution. While the majority of sequences correspond to Listeria monocytogenes, the presence of contaminant reads may influence the interpretation of results by introducing misleading resistance gene profiles if contaminant species carry different resistance genes or they might affect sequence typing accuracy. Therefore, results from these samples will be interpreted carefully, considering possible contamination effects and cross-validating findings when possible.
 
 #### Conclusion and Next Steps:
 -	Exclude SRR27013337 from further analysis due to high contamination.
--	Proceed with downstream analyses (e.g., antibiotic resistance profiling, phylogenetic reconstruction) for samples dominated by Listeria monocytogenes.
--	Samples with moderate contamination will be flagged and monitored closely during interpretation.
+-	Proceed with downstream analyses for samples dominated by Listeria monocytogenes.
+-	Samples with moderate contamination will be monitored closely during interpretation.
 #### Additional Visualizations:
 Sankey diagrams were generated using Pavian to visualize the taxonomic breakdown of each sample. These interactive visualizations clearly show how sequence reads are distributed among bacterial taxa, making it easier to:
 -	Confirm the dominance of Listeria monocytogenes, and
