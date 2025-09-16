@@ -108,6 +108,22 @@ The analysis was performed using Abricate with the VFDB (Virulence Factor Databa
 - Several genes from Listeria Pathogenicity Island 3 (LIPI-3), which codes for Listeriolysin S (LLS)—a bacteriocin and hemolytic cytotoxic factor—were identified, including llsA, llsH, llsX, llsB, llsY, llsD, and llsP. The presence of these genes indicates that the strains are highly virulent with enhanced capacity for cytotoxicity and survival in competitive environments.
 Most virulence genes, including those critical for infection and intracellular survival, were present in nearly all isolates, underlining the high pathogenic potential of this outbreak strain.
 
+### Discussion
+
+- Our analysis shows that all Listeria monocytogenes samples come from the same strain (ST6), which is linked to meat products and can cause serious illness. This helps confirm the outbreak source and track how it spreads.
+
+- We found genes that make the bacteria resistant to some antibiotics like fluoroquinolone and fosfomycin, but the usual treatments for listeriosis, such as ampicillin and gentamicin, should still work. It’s important to keep monitoring for any new resistance.
+
+- The bacteria also carry several genes that help them invade and survive inside human cells, making this strain highly virulent.
+
+- Genomic data helps turn complex information into clear insights that public health teams can use.
+
+- Sharing this information in real-time supports outbreak response teams to track how the strain changes and spreads.
+
+- This improves decision-making for controlling the outbreak and protecting the public.
+
+- Overall, ongoing monitoring and clear communication are key to managing outbreaks, ensuring treatments remain effective, and keeping food products safe.
+
 
 
 
