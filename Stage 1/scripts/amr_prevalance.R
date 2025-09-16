@@ -1,3 +1,6 @@
+# This script processes Abricate CARD output to clean and summarize AMR gene data.
+# It calculates resistance gene prevalence across samples and exports summary files.
+
 # Load required library
 library(dplyr)
 
