@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#===============================
+# Runs Abricate on contigs from each contigs.fasta file in SPAdes output folder (excluding SRR27013337).
+# Appends results with sample names to a combined output TSV file.
+#==============================
+
 INPUT_DIR="/home/maa/himabindu/results/SPAdes_output"
 OUTPUT_FILE="/home/maa/himabindu/reports/abricate_resf_results.tsv"  # You can change this
 DB="card"
