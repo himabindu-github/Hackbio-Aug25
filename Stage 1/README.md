@@ -79,6 +79,26 @@ Sankey diagrams were generated using Pavian to visualize the taxonomic breakdown
 Multilocus Sequence Typing (MLST) was performed to understand the genetic relationship of Listeria monocytogenes from the samples in this study. This method analyzes specific housekeeping genes to identify the sequence type (ST) of bacterial strains, helping to confirm if cases are linked to the same source.
 All samples in this study were identified as Sequence Type 6 (ST6), with a consistent allelic profile across seven key genes: abcZ(3), bglA(9), cat(9), dapE(3), dat(3), ldh(1), lhkA(5). This ST6 belongs to Clonal Complex 6 (CC6), which has been previously found in meat samples and is known to be associated with foodborne outbreaks.
 The uniform presence of ST6/CC6 with this allelic profile in all samples indicates that the outbreak was caused by a single, clonal strain. This information is crucial for epidemiologists to track the spread, identify contamination sources, and develop targeted interventions to prevent future outbreaks. Using MLST improves outbreak investigation and enhances public health response by providing precise genetic information about the bacteria involved.
+### Step 7 : Identification of Antimicrobial Resistance (AMR) Genes
+
+The next step was to identify antimicrobial resistance (AMR) genes in the Listeria monocytogenes isolates used in this study. This helps us know which antibiotics might not work and how to better control the outbreak.
+
+AMR gene detection was performed using Abricate with the CARD (Comprehensive Antibiotic Resistance Database). This analysis identified four resistance genes present in all 24 samples: fosX, lin, norB, and listeria_monocytogenes_mprF.
+
+fosX: Confers resistance to fosfomycin by inactivating the antibiotic.
+
+lin: Associated with resistance to lincosamide antibiotics through drug modification.
+
+norB: A gene linked to fluoroquinolone resistance via efflux mechanisms.
+
+listeria_monocytogenes_mprF: Confers resistance to peptide antibiotics by modifying membrane charge, reducing drug binding.
+
+#### Prevalance of AMR genes:
+All the samples used in this study showed 100% prevalence of the above 4 AMR genes, indicating widespread resistance potential to fluoroquinolone, fosfomycin, lincosamide, and peptide antibiotic classes within the outbreak strains.
+The presence of these genes suggests that antibiotics from these classes may be less effective or ineffective for treating infections caused by these isolates. Careful antibiotic selection is essential to ensure effective clinical management.
+Importantly, no resistance genes were detected that confer resistance to first-line drugs used for listeriosis treatment, such as ampicillin and gentamicin.
+Treatment Recommendations:
+Standard therapy with ampicillin combined with gentamicin remains effective and appropriate. Continued monitoring is recommended to detect any future emergence of resistance to these frontline antibiotics.
 
 
 
