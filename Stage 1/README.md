@@ -100,6 +100,13 @@ Importantly, no resistance genes were detected that confer resistance to first-l
 Treatment Recommendations:
 Standard therapy with ampicillin combined with gentamicin remains effective and appropriate. Continued monitoring is recommended to detect any future emergence of resistance to these frontline antibiotics.
 
+### Virulence Factor Analysis
+To better understand the disease-causing potential of the Listeria monocytogenes isolates, we analyzed their virulence genes. This is important because virulence factors determine how well the bacteria can infect host cells, survive inside them, and spread, which impacts the severity of an outbreak.
+The analysis was performed using Abricate with the VFDB (Virulence Factor Database), which identifies known virulence genes from genomic data.
+- Genes hly, mpl, actA, plcA, plcB, and prfA correspond to Pathogenicity Island 1 (LIPI-1), which is essential for the intracellular life cycle of L. monocytogenes, enabling it to invade and multiply within host cells.
+- The InlA-InlB locus, including inlA (Internalin A) and inlB (Internalin B), is involved in bacterial adhesion and entry into host cells, critical early steps in infection.
+- Several genes from Listeria Pathogenicity Island 3 (LIPI-3), which codes for Listeriolysin S (LLS)—a bacteriocin and hemolytic cytotoxic factor—were identified, including llsA, llsH, llsX, llsB, llsY, llsD, and llsP. The presence of these genes indicates that the strains are highly virulent with enhanced capacity for cytotoxicity and survival in competitive environments.
+Most virulence genes, including those critical for infection and intracellular survival, were present in nearly all isolates, underlining the high pathogenic potential of this outbreak strain.
 
 
 
