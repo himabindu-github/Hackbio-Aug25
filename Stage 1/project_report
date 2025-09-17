@@ -486,7 +486,7 @@ for contigs_fasta in "$CONTIGS_DIR"/*.fasta; do
            -outfmt "6 qseqid sseqid pident length evalue bitscore stitle" \
            -max_target_seqs 5
 
-    echo "✅ BLAST complete for 16S rRNA of $sample_name. Results saved to $blast_out"
+    echo "BLAST complete for 16S rRNA of $sample_name. Results saved to $blast_out"
 
 done
 
