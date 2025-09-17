@@ -684,6 +684,9 @@ write.csv(amr_summary, "resistance_gene_prevalence.csv", row.names = FALSE)
 
 
 #### Virulence factor analysis
+# To better understand the pathogenic potential of the Listeria monocytogenes isolates, we also analyzed their virulence gene content. 
+# Virulence factors are critical for the bacteria’s ability to infect, survive, and cause disease, influencing the outbreak severity and clinical outcomes. 
+# This analysis was performed using Abricate with the VFDB (Virulence Factor Database), complementing the AMR gene detection to provide a comprehensive overview of the isolates’ threat profile.
 
 #!/bin/bash
 
