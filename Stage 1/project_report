@@ -10,7 +10,7 @@
 ###########################################################
 
 #### Module 1: Data download and set up
-#------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------
 # Download raw sequencing data (.fastq.gz) for 50 samples from ENA using curl commands.
 # Organize downloaded files into raw_data_wgs/ with clear, consistent filenames.
 # This streamlines data management and prepares files for downstream analysis.
@@ -86,7 +86,7 @@ echo "All files downloaded to '$TARGET_DIR/'"
 
 
 #### Module 2: QC
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------
 # Perform quality control (QC) on raw reads using FastQC and MultiQC to assess read quality, adapter contamination, and GC content.
 # Identify issues like low-quality bases or adapters, then trim and filter reads using fastp or Trimmomatic.
 # Ensures high-quality data for accurate assembly and downstream analysis.
@@ -164,13 +164,14 @@ multiqc "$FASTQC_TRIMMED_DIR" "$OUTPUT_DIR" -o "$MULTIQC_TRIMMED_DIR"
 echo "Done!"
 
 # Results:
+#***********************************************
 # Initial QC of 50 samples showed good base quality and expected GC content, but some adapter contamination and high duplication.
 # Post-trimming with fastp adapters and duplicates were removed, improving overall read quality for reliable downstream analysis.
 # Nextera XT library prep can cause sequence bias in the first ~12 bases, triggering expected FastQC warnings not indicative of poor quality.
 # Overall, the high-quality trimmed reads passed QC and were deemed suitable for accurate genome assembly using SPAdes — hence moving to the next stage of the workflow.
 
 ##### Module 3 : Genome assembly
-# -----------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 # Genome assembly reconstructs bacterial genomes by stitching together cleaned sequencing reads into contigs.
 # Using SPAdes, these contigs represent the organism’s genome, enabling detection of resistance genes, virulence factors, and species identification.
 # This step converts raw data into usable genomic sequences for further analysis.
@@ -228,7 +229,7 @@ for f1 in "$INPUT_DIR"/*_1.trimmed.fastq.gz; do
 done
 
 #### Module 4 : QUAST
-# ------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------
 # Assess assembly quality using QUAST to obtain metrics like genome size, N50, GC content, and contig count.
 # These metrics help evaluate completeness and reliability of each genome assembly.
 # Detect outliers indicating contamination or misassembly to ensure only high-quality genomes proceed to analysis.
@@ -285,6 +286,7 @@ done
 echo "All QUAST analyses completed."
 
 #### Quast Summary
+#---------------------------------------------------------------------------------------------
 
 #!/bin/bash
 
@@ -320,6 +322,7 @@ done
 echo "Summary of QUAST reports written to $QUAST_SUMMARY"
 
 # Results:
+#****************************************************************
 # Genome lengths ranged from 3.02 to 3.13 Mb, consistent with Listeria expectations.
 # N50 values varied between ~60 kb and over 250 kb, indicating assembly contiguity differences.
 # GC content was stable around 37.8% to 37.9%, typical for this species.
@@ -329,6 +332,7 @@ echo "Summary of QUAST reports written to $QUAST_SUMMARY"
 # The SPAdes-assembled contigs can now be confidently used to identify the organism, the next crucial step in the workflow.
 
 #### Module 5: Blast
+#---------------------------------------------------------------------------------------------------
 # Objective: Confirm the identity of the assembled organism using sequence similarity.
 # This step selects contigs >500 bp from each assembly and compares them against a custom Listeria reference database using BLASTn.
 # Matching contigs with high similarity to Listeria monocytogenes sequences verifies the correct organism was assembled.
@@ -382,7 +386,8 @@ for sample_fasta in "$CONTIGS_DIR"/*.fasta; do
 done
 
 echo "All done!"
-# Results  ********************************
+# Results  
+#******************************************************************
 # BLAST results confirmed the identity of the organism as *Listeria monocytogenes*.
 # Multiple high-scoring hits were found against the Listeria monocytogenes EGD-e reference genome (NC_003210.1),
 # with sequence identity >95% and alignment lengths covering tens of thousands of bases.
@@ -390,52 +395,8 @@ echo "All done!"
 # The organism is confidently identified as *Listeria monocytogenes*, allowing progression to downstream analyses.
 
 
-#!/bin/bash
-
-#==================================
-# Extract 16S rRNA sequences using barrnap from each SPAdes contigs.fasta file,
-# then BLAST the extracted 16S sequences against a 16S database for species confirmation.
-#==================================
-
-CONTIGS_DIR="spades_contigs"         # Input folder containing contigs.fasta files
-EXTRACTED_16S_DIR="extracted_16s"    # Where extracted 16S sequences will be saved
-BLAST_RESULTS_DIR="blast_16s_results" # Output folder for BLAST results
-
-DB_16S="listeria_db"             # Your 16S BLAST database (makeblastdb output prefix)
-
-mkdir -p "$EXTRACTED_16S_DIR"
-mkdir -p "$BLAST_RESULTS_DIR"
-
-# Loop over each contigs fasta
-for contigs_fasta in "$CONTIGS_DIR"/*.fasta; do
-    sample_name=$(basename "$contigs_fasta" .fasta)
-    echo "Processing sample: $sample_name"
-
-    barrnap_out_fasta="$EXTRACTED_16S_DIR/${sample_name}_16s.fasta"
-
-    # Extract 16S rRNA sequences using barrnap's built-in output option
-    barrnap --kingdom bac --outseq "$barrnap_out_fasta" "$contigs_fasta" 2> /dev/null
-
-    if [[ ! -s "$barrnap_out_fasta" ]]; then
-        echo "No 16S rRNA gene found for $sample_name — skipping 16S BLAST."
-        continue
-    fi
-
-    # Run BLASTn on extracted 16S sequences
-    blast_out="$BLAST_RESULTS_DIR/${sample_name}_16s_blast.tsv"
-    blastn -query "$barrnap_out_fasta" \
-           -db "$DB_16S" \
-           -out "$blast_out" \
-           -outfmt "6 qseqid sseqid pident length evalue bitscore stitle" \
-           -max_target_seqs 5
-
-    echo "BLAST complete for 16S rRNA of $sample_name. Results saved to $blast_out"
-
-done
-
-echo "All samples processed."
-
 # Module 16S rRNA Blast 
+#-----------------------------------------------------------------------------------------------
 
 # Objective: Confirm species identity by extracting 16S rRNA genes from assembled contigs and comparing them to a reference 16S database using BLAST.
 # What it does:
@@ -493,12 +454,14 @@ done
 echo "All samples processed."
 
 # Results:
+#**********************************************************************
 # The 16S rRNA BLAST results show 100% sequence identity across all samples to the Listeria monocytogenes EGD-e reference genome (NC_003210.1),
 # with full-length alignments (~1547 bp) and perfect e-values (0.0).
 # This confirms the species identity with high confidence, reinforcing the robustness of our organism identification step.
 # However, to further investigate sample composition and detect any potential contamination or mixed species, especially in outlier samples, we proceed with Kraken taxonomic classification in the next step.
 
 #### Module 6 : kraken classification
+#--------------------------------------------------------------------------------------------
 # Kraken provides fast and accurate taxonomic assignment of sequences, helping confirm Listeria monocytogenes dominance
 # or detect other organisms present in the samples, ensuring data reliability for downstream analyses.
 
@@ -557,7 +520,8 @@ done
 
 echo "All samples processed."
 
-
+# Results:
+#****************************************************
 # Key Findings from Kraken classification:
 # Most samples had >70% of reads classified as Listeria monocytogenes, confirming the outbreak pathogen.
 # Sample SRR27013337 showed ~85% Micrococcus and only 12% Listeria, indicating contamination/mislabeling; it will be excluded.
@@ -567,6 +531,7 @@ echo "All samples processed."
 # Cross-validation and careful interpretation will ensure robust conclusions despite contamination concerns.
 
 #### Step7 : AMR gene detection - Abricate
+#------------------------------------------------------------------
 # Following confirmation of Listeria monocytogenes as the outbreak pathogen, we performed antimicrobial resistance (AMR) gene screening using Abricate.
 # This step identifies known resistance determinants within the assembled genomes, providing insights into potential treatment challenges and guiding antibiotic therapy decisions.
 
@@ -612,7 +577,9 @@ for subdir in "$INPUT_DIR"/*; do
     fi
   fi
 done
-# Results
+
+# Results:
+#**********************************************
 # Abricate analysis was performed using a modular script allowing easy switching of AMR databases.
 # Different databases were tested: ResFinder detected only the FosX gene, NCBI identified FosX and lin genes,
 # CARD revealed four resistance genes including FosX, mprF, lin, and norB with high coverage and identity.
@@ -630,6 +597,7 @@ done
 # Future phenotypic testing is needed for clinical relevance. Despite limitations, high sequence similarity suggests these AMR genes are likely functional.
 
 ##### AMR prevalance
+#-----------------------------------------------------------------------------------------------
 # After detecting antimicrobial resistance (AMR) genes with Abricate, this script cleans and summarizes the CARD database output.
 # It calculates the prevalence of different resistance gene classes across all samples, providing an overview of the AMR landscape within the outbreak isolates.
 # These results help to identify common resistance mechanisms and inform potential treatment options.
@@ -680,6 +648,7 @@ write.csv(amr_card_resgene_data_clean, "abricate_card_clean.csv", row.names = FA
 write.csv(amr_summary, "resistance_gene_prevalence.csv", row.names = FALSE)
 
 # Results:
+#*************************************************
 # All samples showed 100% prevalence of four AMR genes, indicating widespread potential resistance
 # to fluoroquinolone, fosfomycin, lincosamide, and peptide antibiotic classes within the outbreak strains.
 # This suggests limited effectiveness of these antibiotic classes for treating infections.
@@ -688,6 +657,7 @@ write.csv(amr_summary, "resistance_gene_prevalence.csv", row.names = FALSE)
 
 
 #### Virulence factor analysis
+#--------------------------------------------------------------------------------------------------
 # To better understand the pathogenic potential of the Listeria monocytogenes isolates, we also analyzed their virulence gene content. 
 # Virulence factors are critical for the bacteria’s ability to infect, survive, and cause disease, influencing the outbreak severity and clinical outcomes. 
 # This analysis was performed using Abricate with the VFDB (Virulence Factor Database), complementing the AMR gene detection to provide a comprehensive overview of the isolates’ threat profile.
@@ -724,12 +694,14 @@ for subdir in "$INPUT_DIR"/*; do
 done
 
 # Results:
+#**************************************************
 # Key virulence genes hly, mpl, actA, plcA, plcB, and prfA from Pathogenicity Island 1 (LIPI-1) were detected, confirming the isolates’ capability for intracellular invasion and multiplication. 
 # The inlA and inlB genes involved in host cell adhesion and entry were also present, highlighting the bacteria’s ability to initiate infection effectively. 
 # Additionally, multiple LIPI-3 genes encoding Listeriolysin S (LLS), a potent cytotoxic factor, were identified, suggesting enhanced virulence and competitive survival traits. 
 # Overall, the widespread presence of these virulence factors underscores the high pathogenic potential of the outbreak strains.
 
 #### VF prevalance
+#-------------------------------------------------------------------------------------
 
 # This script processes Abricate vfdb output to clean and summarize virulence factor data.
 # It calculates virulence factor gene prevalence across samples and exports summary files.
@@ -778,6 +750,7 @@ write.csv(virulence_factor_data_clean, "abricate_vfdb_clean.csv", row.names = FA
 write.csv(virulence_factor_summary, "virulence_factor_prevalence.csv", row.names = FALSE)
 
 # Results:
+#*********************************************************
 # The virulence genes detected were consistently present across nearly all samples analyzed, indicating a high prevalence of key pathogenicity factors in the outbreak strains.
 # For example, essential genes from LIPI-1 (hly, mpl, actA, plcA, plcB, prfA) and adhesion genes (lap, inlA, inlB) were found in 100% of samples, highlighting the uniform virulence potential among isolates.
 # Some LLS cluster genes (llsA, llsX, llsY) also showed near-complete presence, though a few like llsH had slightly lower identity or coverage in some samples.
@@ -793,6 +766,7 @@ write.csv(virulence_factor_summary, "virulence_factor_prevalence.csv", row.names
 
 
 #### Conclusion:
+#***********************************************************
 # The study successfully identified Listeria monocytogenes from outbreak samples and classified them as Sequence Type 6 (ST6) within Clonal Complex 6 (CC6), indicating a clonal outbreak likely from a common source.
 # AMR gene detection revealed resistance potential to fluoroquinolones, fosfomycin, lincosamide, and peptide antibiotics, while frontline treatments such as ampicillin and gentamicin remain effective.
 # Virulence factor analysis showed the presence of multiple key genes, including those in LIPI-1 and LIPI-3, confirming the high pathogenic potential of the outbreak strains.
@@ -801,10 +775,8 @@ write.csv(virulence_factor_summary, "virulence_factor_prevalence.csv", row.names
 # Future improvements should include phenotypic antibiotic susceptibility testing, monitoring for horizontal gene transfer, and expanded genomic surveillance to better understand resistance mechanisms and inform clinical management.
 
 
-Ask ChatGPT
 
 
-
-#LinkedIn post: https://www.linkedin.com/feed/update/urn:li:activity:7373785520495259649/
+# LinkedIn post: https://www.linkedin.com/feed/update/urn:li:activity:7373785520495259649/
 
 # Github: https://github.com/himabindu-github/Hackbio-Aug25/tree/main/Stage%201
