@@ -557,6 +557,15 @@ done
 
 echo "All samples processed."
 
+
+# Key Findings from Kraken classification:
+# Most samples had >70% of reads classified as Listeria monocytogenes, confirming the outbreak pathogen.
+# Sample SRR27013337 showed ~85% Micrococcus and only 12% Listeria, indicating contamination/mislabeling; it will be excluded.
+# Some samples had minor contamination (<20%) with genera like Ralstonia and Streptococcus, acceptable for further analysis.
+# About 10–20% of reads were “Other” or “Unclassified,” typical in metagenomic data and unlikely to impact results significantly.
+# Samples with moderate contamination will be included but interpreted cautiously, as contaminants may affect resistance gene profiles and sequence typing accuracy.
+# Cross-validation and careful interpretation will ensure robust conclusions despite contamination concerns.
+
 #### Step7 : AMR gene detection - Abricate
 
 #!/bin/bash
