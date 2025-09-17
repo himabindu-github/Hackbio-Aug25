@@ -165,8 +165,9 @@ echo "Done!"
 
 # Results:
 # Initial QC of 50 samples showed good base quality and expected GC content, but some adapter contamination and high duplication.
-# Post-trimming with fastp reduced adapters and duplicates, improving overall read quality for reliable downstream analysis.
+# Post-trimming with fastp adapters and duplicates were removed, improving overall read quality for reliable downstream analysis.
 # Nextera XT library prep can cause sequence bias in the first ~12 bases, triggering expected FastQC warnings not indicative of poor quality.
+# Overall, the high-quality trimmed reads passed QC and were deemed suitable for accurate genome assembly using SPAdes — hence moving to the next stage of the workflow.
 
 ##### Module 3 : Genome assembly
 # -----------------------------------------------------
