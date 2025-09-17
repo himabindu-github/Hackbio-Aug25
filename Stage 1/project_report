@@ -792,7 +792,17 @@ write.csv(virulence_factor_summary, "virulence_factor_prevalence.csv", row.names
 # enhancing outbreak investigation and informing targeted control measures to prevent future infections.
 
 
+#### Conclusion:
+# The study successfully identified Listeria monocytogenes from outbreak samples and classified them as Sequence Type 6 (ST6) within Clonal Complex 6 (CC6), indicating a clonal outbreak likely from a common source.
+# AMR gene detection revealed resistance potential to fluoroquinolones, fosfomycin, lincosamide, and peptide antibiotics, while frontline treatments such as ampicillin and gentamicin remain effective.
+# Virulence factor analysis showed the presence of multiple key genes, including those in LIPI-1 and LIPI-3, confirming the high pathogenic potential of the outbreak strains.
+# Antibiotic recommendations - ampicillin and gentamicin, were made based on the detected resistance genes, emphasizing the need for careful antibiotic selection.
+# Multilocus Sequence Typing (MLST) provided precise strain-level resolution to support epidemiological tracking and outbreak source identification.
+# Future improvements should include phenotypic antibiotic susceptibility testing, monitoring for horizontal gene transfer, and expanded genomic surveillance to better understand resistance mechanisms and inform clinical management.
+
+
 Ask ChatGPT
+
 
 
 #LinkedIn post: https://www.linkedin.com/feed/update/urn:li:activity:7373785520495259649/
