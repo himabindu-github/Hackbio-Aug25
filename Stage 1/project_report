@@ -318,6 +318,13 @@ done
 
 echo "Summary of QUAST reports written to $QUAST_SUMMARY"
 
+# Results:
+# Genome lengths ranged from 3.02 to 3.13 Mb, consistent with Listeria expectations.
+# N50 values varied between ~60 kb and over 250 kb, indicating assembly contiguity differences.
+# GC content was stable around 37.8% to 37.9%, typical for this species.
+# Most samples had between 30 and 100 contigs, reflecting assembly fragmentation.
+# Sample SRR27013337 stood out as an outlier, likely due to contamination or misclassification.
+
 #### Step5: Blast
 
 #!/bin/bash
