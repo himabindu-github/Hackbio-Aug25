@@ -576,8 +576,21 @@ echo "All samples processed."
 #==============================
 
 INPUT_DIR="/home/maa/himabindu/results/SPAdes_output"
-OUTPUT_FILE="/home/maa/himabindu/reports/abricate_resf_results.tsv"  # You can change this
+OUTPUT_FILE="/home/maa/himabindu/reports/abricate_card_results.tsv"  
 DB="card"
+
+# Check if input directory exists
+if [[ ! -d "$INPUT_DIR" ]]; then
+  echo "Error: Input directory $INPUT_DIR does not exist. Exiting."
+  exit 1
+fi
+
+# Check if abricate database exists
+if ! abricate --list | grep -q "^$DB$"; then
+  echo "Error: Abricate database '$DB' not found. Please download or install the database first."
+  exit 1
+fi
+
 # Empty the output file first
 > "$OUTPUT_FILE"
 
