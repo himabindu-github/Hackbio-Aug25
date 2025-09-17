@@ -226,7 +226,11 @@ for f1 in "$INPUT_DIR"/*_1.trimmed.fastq.gz; do
   echo "Done assembling!"
 done
 
-#### Step4 : QUAST
+#### Module 4 : QUAST
+# ------------------------------------------------------------
+# Assess assembly quality using QUAST to obtain metrics like genome size, N50, GC content, and contig count.
+# These metrics help evaluate completeness and reliability of each genome assembly.
+# Detect outliers indicating contamination or misassembly to ensure only high-quality genomes proceed to analysis.
 
 #!/bin/bash
 
