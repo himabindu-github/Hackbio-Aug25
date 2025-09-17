@@ -624,6 +624,10 @@ done
 # Suggested Effective Antibiotics:
 # Beta-lactams: ampicillin, amoxicillin (no resistance genes detected)
 # Aminoglycosides: gentamicin (no resistance genes detected)
+# AMR genes detected by Abricate were validated via BLASTn against the CARD database, showing ≥94% identity and ≥99% coverage, 
+# confirming their presence and reducing false positives. However, gene presence alone does not guarantee phenotypic resistance,
+# as expression and regulation also influence functionality. Horizontal gene transfer may affect gene spread, though not analyzed here.
+# Future phenotypic testing is needed for clinical relevance. Despite limitations, high sequence similarity suggests these AMR genes are likely functional.
 
 ##### AMR prevalance
 # After detecting antimicrobial resistance (AMR) genes with Abricate, this script cleans and summarizes the CARD database output.
