@@ -389,6 +389,15 @@ echo "All done!"
 # This high sequence similarity and alignment coverage across large contigs validate the assemblies.
 # The organism is confidently identified as *Listeria monocytogenes*, allowing progression to downstream analyses.
 
+# Objective: Confirm species identity by extracting 16S rRNA genes from assembled contigs and comparing them to a reference 16S database using BLAST.
+# What it does:
+# - Uses barrnap to extract 16S rRNA sequences from SPAdes genome assemblies.
+# - Runs BLASTn to match extracted 16S sequences against a custom Listeria 16S database.
+# - Outputs BLAST results for species-level confirmation.
+# Previously, organism ID was confirmed using BLAST of the top 5 longest contigs.
+# Here, we use 16S rRNA gene sequences — the gold standard for bacterial identification —
+# to further validate species identity, making the workflow more robust and reliable.
+
 #### Step6 : kraken classification
 
 #!/bin/bash
