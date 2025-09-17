@@ -612,6 +612,12 @@ for subdir in "$INPUT_DIR"/*; do
     fi
   fi
 done
+# Results
+# Abricate analysis was performed using a modular script allowing easy switching of AMR databases.
+# Different databases were tested: ResFinder detected only the FosX gene, NCBI identified FosX and lin genes,
+# CARD revealed four resistance genes including FosX, mprF, lin, and norB with high coverage and identity.
+# Due to its broader detection capability, the CARD database results were chosen for downstream analysis.
+# This approach ensures comprehensive AMR gene profiling across Listeria monocytogenes outbreak samples.
 
 ##### AMR prevalance
 # After detecting antimicrobial resistance (AMR) genes with Abricate, this script cleans and summarizes the CARD database output.
