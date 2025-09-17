@@ -382,6 +382,12 @@ for sample_fasta in "$CONTIGS_DIR"/*.fasta; do
 done
 
 echo "All done!"
+# Results  ********************************
+# BLAST results confirmed the identity of the organism as *Listeria monocytogenes*.
+# Multiple high-scoring hits were found against the Listeria monocytogenes EGD-e reference genome (NC_003210.1),
+# with sequence identity >95% and alignment lengths covering tens of thousands of bases.
+# This high sequence similarity and alignment coverage across large contigs validate the assemblies.
+# The organism is confidently identified as *Listeria monocytogenes*, allowing progression to downstream analyses.
 
 #### Step6 : kraken classification
 
