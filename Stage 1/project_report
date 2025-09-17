@@ -614,9 +614,10 @@ for subdir in "$INPUT_DIR"/*; do
 done
 
 ##### AMR prevalance
+# After detecting antimicrobial resistance (AMR) genes with Abricate, this script cleans and summarizes the CARD database output.
+# It calculates the prevalence of different resistance gene classes across all samples, providing an overview of the AMR landscape within the outbreak isolates.
+# These results help to identify common resistance mechanisms and inform potential treatment options.
 
-# This script processes Abricate CARD output to clean and summarize AMR gene data.
-# It calculates resistance gene prevalence across samples and exports summary files.
 
 # Load required library
 library(dplyr)
