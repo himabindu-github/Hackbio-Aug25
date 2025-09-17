@@ -496,10 +496,9 @@ echo "All samples processed."
 # The 16S rRNA BLAST results show 100% sequence identity across all samples to the Listeria monocytogenes EGD-e reference genome (NC_003210.1),
 # with full-length alignments (~1547 bp) and perfect e-values (0.0).
 # This confirms the species identity with high confidence, reinforcing the robustness of our organism identification step.
+# However, to further investigate sample composition and detect any potential contamination or mixed species, especially in outlier samples, we proceed with Kraken taxonomic classification in the next step.
 
 #### Module 6 : kraken classification
-# To further investigate sample composition and identify any contamination or mixed species presence,
-# especially in outlier samples like SRR27013337, we run Kraken for taxonomic classification.
 # Kraken provides fast and accurate taxonomic assignment of sequences, helping confirm Listeria monocytogenes dominance
 # or detect other organisms present in the samples, ensuring data reliability for downstream analyses.
 
