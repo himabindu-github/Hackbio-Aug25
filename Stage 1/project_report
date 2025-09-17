@@ -446,6 +446,17 @@ echo "All samples processed."
 # Here, we use 16S rRNA gene sequences — the gold standard for bacterial identification —
 # to further validate species identity, making the workflow more robust and reliable.
 
+
+
+
+
+
+# The 16S rRNA BLAST results show 100% sequence identity across all samples
+# to the Listeria monocytogenes EGD-e reference genome (NC_003210.1),
+# with full-length alignments (~1547 bp) and perfect e-values (0.0).
+# This confirms the species identity with high confidence,
+# reinforcing the robustness of our organism identification step.
+
 #### Step6 : kraken classification
 
 #!/bin/bash
