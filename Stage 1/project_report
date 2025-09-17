@@ -618,6 +618,9 @@ done
 # CARD revealed four resistance genes including FosX, mprF, lin, and norB with high coverage and identity.
 # Due to its broader detection capability, the CARD database results were chosen for downstream analysis.
 # This approach ensures comprehensive AMR gene profiling across Listeria monocytogenes outbreak samples.
+# Along with detecting AMR genes, determining their prevalence across samples is crucial to understand how widespread each resistance mechanism is within the outbreak.
+# This prevalence information helps prioritize genes of clinical or epidemiological importance and informs potential intervention strategies.
+# Therefore, we performed prevalence analysis on the CARD results to quantify resistance gene distribution across all isolates.
 
 ##### AMR prevalance
 # After detecting antimicrobial resistance (AMR) genes with Abricate, this script cleans and summarizes the CARD database output.
