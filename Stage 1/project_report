@@ -567,6 +567,8 @@ echo "All samples processed."
 # Cross-validation and careful interpretation will ensure robust conclusions despite contamination concerns.
 
 #### Step7 : AMR gene detection - Abricate
+# Following confirmation of Listeria monocytogenes as the outbreak pathogen, we performed antimicrobial resistance (AMR) gene screening using Abricate.
+# This step identifies known resistance determinants within the assembled genomes, providing insights into potential treatment challenges and guiding antibiotic therapy decisions.
 
 #!/bin/bash
 
