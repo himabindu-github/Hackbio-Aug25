@@ -170,6 +170,9 @@ echo "Done!"
 
 ##### Module 3 : Genome assembly
 # -----------------------------------------------------
+# Genome assembly reconstructs bacterial genomes by stitching together cleaned sequencing reads into contigs.
+# Using SPAdes, these contigs represent the organism’s genome, enabling detection of resistance genes, virulence factors, and species identification.
+# This step converts raw data into usable genomic sequences for further analysis.
 
 #!/bin/bash
 
