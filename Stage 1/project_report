@@ -1,10 +1,13 @@
-# The Project:
+##########################################################
+# The Project
+##########################################################
 # Analyzed WGS data from 100+ samples of the 2017-2018 South African Listeriosis outbreak.
 # Goals: confirm pathogen identity, detect AMR genes, and identify virulence factors.
 # Results guide effective antibiotic and treatment strategies.
 
-
-
+##########################################################
+# Methods
+###########################################################
 
 #### Step1: Data download and set up
 
