@@ -497,7 +497,11 @@ echo "All samples processed."
 # with full-length alignments (~1547 bp) and perfect e-values (0.0).
 # This confirms the species identity with high confidence, reinforcing the robustness of our organism identification step.
 
-#### Step6 : kraken classification
+#### Module 6 : kraken classification
+# To further investigate sample composition and identify any contamination or mixed species presence,
+# especially in outlier samples like SRR27013337, we run Kraken for taxonomic classification.
+# Kraken provides fast and accurate taxonomic assignment of sequences, helping confirm Listeria monocytogenes dominance
+# or detect other organisms present in the samples, ensuring data reliability for downstream analyses.
 
 #!/bin/bash
 
