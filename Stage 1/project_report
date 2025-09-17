@@ -621,6 +621,9 @@ done
 # Along with detecting AMR genes, determining their prevalence across samples is crucial to understand how widespread each resistance mechanism is within the outbreak.
 # This prevalence information helps prioritize genes of clinical or epidemiological importance and informs potential intervention strategies.
 # Therefore, we performed prevalence analysis on the CARD results to quantify resistance gene distribution across all isolates.
+# Suggested Effective Antibiotics:
+# Beta-lactams: ampicillin, amoxicillin (no resistance genes detected)
+# Aminoglycosides: gentamicin (no resistance genes detected)
 
 ##### AMR prevalance
 # After detecting antimicrobial resistance (AMR) genes with Abricate, this script cleans and summarizes the CARD database output.
@@ -671,6 +674,13 @@ amr_summary <- amr_card_resgene_data_clean %>%
 # Step 7: Export the results to CSV files
 write.csv(amr_card_resgene_data_clean, "abricate_card_clean.csv", row.names = FALSE)
 write.csv(amr_summary, "resistance_gene_prevalence.csv", row.names = FALSE)
+
+# Results:
+# All samples showed 100% prevalence of four AMR genes, indicating widespread potential resistance
+# to fluoroquinolone, fosfomycin, lincosamide, and peptide antibiotic classes within the outbreak strains.
+# This suggests limited effectiveness of these antibiotic classes for treating infections.
+# Importantly, no resistance genes were detected against first-line listeriosis drugs such as ampicillin and gentamicin.
+# Therefore, standard therapy with ampicillin and gentamicin remains effective.
 
 
 #### Virulence factor analysis
