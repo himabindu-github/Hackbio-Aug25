@@ -25,7 +25,7 @@ for contigs_fasta in "$CONTIGS_DIR"/*.fasta; do
     barrnap --kingdom bac --outseq "$barrnap_out_fasta" "$contigs_fasta" 2> /dev/null
 
     if [[ ! -s "$barrnap_out_fasta" ]]; then
-        echo "⚠️ No 16S rRNA gene found for $sample_name — skipping 16S BLAST."
+        echo "No 16S rRNA gene found for $sample_name — skipping 16S BLAST."
         continue
     fi
 
