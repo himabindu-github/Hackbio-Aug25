@@ -10,6 +10,9 @@
 ###########################################################
 
 #### Step1: Data download and set up
+# Download raw sequencing data (.fastq.gz) for 50 samples from ENA using curl commands.
+# Organize downloaded files into raw_data_wgs/ with clear, consistent filenames.
+# This streamlines data management and prepares files for downstream analysis.
 
 #!/bin/bash
 
