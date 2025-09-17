@@ -520,6 +520,17 @@ fi
 # Directory containing individual contig files
 CONTIG_DIR="/Volumes/Crucial X6/wgs_analysis_hackbio/spades_contigs"
 
+# Check if contig directory exists and has .fasta files
+if [[ ! -d "$CONTIG_DIR" ]]; then
+    echo "Contig directory not found at $CONTIG_DIR. Please check the path."
+    exit 1
+elif [[ -z $(ls "$CONTIG_DIR"/*.fasta 2>/dev/null) ]]; then
+    echo "No .fasta files found in $CONTIG_DIR."
+    exit 1
+else
+    echo "Contig files found."
+fi
+
 # Output directory
 OUTPUT_DIR="/Volumes/Crucial X6/wgs_analysis_hackbio/kraken_results"
 mkdir -p "$OUTPUT_DIR"
