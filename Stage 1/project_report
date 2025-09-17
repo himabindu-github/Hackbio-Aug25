@@ -509,6 +509,14 @@ echo "All samples processed."
 # Path to downloaded Kraken2 database
 DB="/Volumes/Crucial X6/wgs_analysis_hackbio/minikraken_8GB_20200312"
 
+# Check if Kraken2 database directory exists
+if [[ ! -d "$DB" ]]; then
+    echo "Kraken2 database directory not found at $DB. Please check the path."
+    exit 1
+else
+    echo "Kraken2 database found."
+fi
+
 # Directory containing individual contig files
 CONTIG_DIR="/Volumes/Crucial X6/wgs_analysis_hackbio/spades_contigs"
 
