@@ -719,6 +719,12 @@ for subdir in "$INPUT_DIR"/*; do
   fi
 done
 
+# Results:
+# Key virulence genes hly, mpl, actA, plcA, plcB, and prfA from Pathogenicity Island 1 (LIPI-1) were detected, confirming the isolates’ capability for intracellular invasion and multiplication. 
+# The inlA and inlB genes involved in host cell adhesion and entry were also present, highlighting the bacteria’s ability to initiate infection effectively. 
+# Additionally, multiple LIPI-3 genes encoding Listeriolysin S (LLS), a potent cytotoxic factor, were identified, suggesting enhanced virulence and competitive survival traits. 
+# Overall, the widespread presence of these virulence factors underscores the high pathogenic potential of the outbreak strains.
+
 #### VF prevalance
 
 # This script processes Abricate vfdb output to clean and summarize virulence factor data.
