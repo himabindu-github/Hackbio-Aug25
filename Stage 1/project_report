@@ -1,0 +1,554 @@
+# The Project:
+# Analyzed WGS data from 100+ samples of the 2017-2018 South African Listeriosis outbreak.
+# Goals: confirm pathogen identity, detect AMR genes, and identify virulence factors.
+# Results guide effective antibiotic and treatment strategies.
+
+
+
+
+#### Step1: Data download and set up
+
+#!/bin/bash
+
+# =====================================
+# To download multiple files listed as curl commands in a file
+# =====================================
+
+# File that contains a list of curl commands, one per line
+URL_FILE="wgs_top_50_urls.sh"
+
+# Directory where downloaded files will be stored
+TARGET_DIR="raw_data_wgs"
+
+# ----------------------------------------------------------
+# STEP 1: Check if the input file exists
+# -----------------------------------------------------------
+if [[ ! -f "$URL_FILE" ]]; then
+  echo "ERROR: File '$URL_FILE' not found!"
+  exit 1                                           
+ # Exit the script if the file is not found
+else
+  echo "File '$URL_FILE' found. Starting downloads"
+fi
+
+# -----------------------------------------------------------
+# STEP 2: Create the target directory if it doesn't exist already
+# ------------------------------------------------------------
+mkdir -p "$TARGET_DIR"  
+# -p ensures no error if the directory already exists
+
+# ---------------------------------------------------------------
+# STEP 3: Loop through each line of the file
+# ---------------------------------------------------------------
+# while IFS= Read the file line-by-line, keeping the line exactly as it is without breaking it at spaces    
+# read -r says: donot interpret backslashes as escape characters
+while IFS= read -r line; do
+ # Skip empty lines or lines starting with #
+  [[ -z "$line" || "$line" =~ ^# ]] && continue
+
+  # -----------------------------------------------------------------
+  # STEP 4: Extract the filename from the curl command using grep
+  # look behind regex (?<=-o), looks for the string after '-o ' and [^ ]+ match all non-space      characters after -o
+  # -----------------------------------------------------------------
+  OUTPUT_FILE=$(echo "$line" | grep -oP '(?<=-o )[^ ]+')
+
+  # --------------------------------------------------------------------
+  # STEP 5: Set the full new path for the output file
+  # -------------------------------------------------------------------
+BASENAME=$(basename "$OUTPUT_FILE")  # skips the path and keeps the file name
+ NEW_OUTPUT="$TARGET_DIR/${BASENAME}" # sets the path
+
+  # -------------------------------------------------------------------
+  # STEP 6: the original output file in the curl command is replaced with the new one which has the path.
+  # This ensures all files are saved in the target directory
+  # ----------------------------------------------------------------------
+  MODIFIED_CURL=$(echo "$line" | sed "s|-o $OUTPUT_FILE|-o $NEW_OUTPUT|")
+
+  # ------------------------------------------------------------------------
+  # STEP 7: Print the destination file and run the curl command
+  # -------------------------------------------------------------------------
+  echo "Downloading to: $NEW_OUTPUT"
+  eval "$MODIFIED_CURL"      # Run the modified command using eval
+
+done < "$URL_FILE"       # Feed the file line by line to the while loop
+
+# ------------------------------------------------------------------------
+# STEP 8: Done message
+# ------------------------------------------------------------------------
+echo "All files downloaded to '$TARGET_DIR/'"
+
+
+#### Step2: QC
+
+#!/bin/bash
+
+
+#==========================================
+#This script performs quality control (QC) and read trimming for raw WGS FASTQ files using FastQC, fastp, and MultiQC.
+#==========================================
+
+# -----------------------------------------------------
+# STEP 1: Define directory paths for inputs and outputs
+# -----------------------------------------------------
+INPUT_DIR="raw_data_wgs"                         # Raw FASTQ files
+OUTPUT_DIR="fastp_output"                        # Output directory for trimmed files and fastp reports
+FASTQC_RAW_DIR="fastqc_raw_output"              # FastQC results for raw reads
+FASTQC_TRIMMED_DIR="fastqc_trimmed_output"      # FastQC results for trimmed reads
+MULTIQC_RAW_DIR="multiqc_raw_output"            # MultiQC summary for raw reads
+MULTIQC_TRIMMED_DIR="multiqc_trimmed_output"    # MultiQC summary for trimmed reads
+
+# -----------------------------------------------------
+# STEP 2: Create all necessary output directories
+# -----------------------------------------------------
+mkdir -p "$OUTPUT_DIR" "$FASTQC_RAW_DIR" "$FASTQC_TRIMMED_DIR" "$MULTIQC_RAW_DIR" "$MULTIQC_TRIMMED_DIR"
+
+# -----------------------------------------------------
+# STEP 3: Run FastQC on raw FASTQ files
+# -----------------------------------------------------
+echo "Running FastQC on raw FASTQ files..."
+fastqc "$INPUT_DIR"/*.fastq.gz -o "$FASTQC_RAW_DIR"
+
+# -----------------------------------------------------
+# STEP 4: Run MultiQC to summarize raw FastQC reports
+# -----------------------------------------------------
+echo "Summarizing raw FastQC reports with MultiQC..."
+multiqc "$FASTQC_RAW_DIR" -o "$MULTIQC_RAW_DIR"
+
+# Check the MultiQC report to decide trimming parameters and sample quality
+
+# -----------------------------------------------------
+# STEP 5: Run fastp to trim raw reads
+# -----------------------------------------------------
+echo "Running fastp for read trimming..."
+
+for f1 in "$INPUT_DIR"/*_1.fastq.gz; do
+  f2="${f1/_1.fastq.gz/_2.fastq.gz}"
+  name=$(basename "$f1" _1.fastq.gz)
+
+  echo "Processing sample: $name"
+
+  fastp \
+    -i "$f1" \
+    -I "$f2" \
+    -o "$OUTPUT_DIR/${name}_1.trimmed.fastq.gz" \
+    -O "$OUTPUT_DIR/${name}_2.trimmed.fastq.gz" \
+    -h "$OUTPUT_DIR/${name}_fastp.html" \
+    -j "$OUTPUT_DIR/${name}_fastp.json" \
+    --thread 4
+
+  echo "Done: $name"
+done
+
+# -----------------------------------------------------
+# STEP 6: Run FastQC on trimmed reads
+# -----------------------------------------------------
+echo "Running FastQC on trimmed FASTQ files..."
+fastqc "$OUTPUT_DIR"/*_trimmed.fastq.gz -o "$FASTQC_TRIMMED_DIR"
+
+# -----------------------------------------------------
+# STEP 7: Summarize trimmed FastQC reports with MultiQC
+# -----------------------------------------------------
+echo "Performing MultiQC..."
+multiqc "$FASTQC_TRIMMED_DIR" "$OUTPUT_DIR" -o "$MULTIQC_TRIMMED_DIR"
+
+echo "Done!"
+
+##### Step3 : Genome assembly
+
+#!/bin/bash
+
+#=============================
+# This script performs SPAdes assembly (de novo assembly) on fastq reads that are processed
+#==============================
+
+
+#------------------------------------------------------
+# Step 1: Set input and output directories
+#-----------------------------------------------------
+
+INPUT_DIR="fastp_output"
+OUTPUT_DIR="spades_output"
+
+#-------------------------------------------------------
+# Step 2: Create output directory if it doesn't exist
+#--------------------------------------------------------
+
+mkdir -p "$OUTPUT_DIR"
+
+#------------------------------------------------------------
+# Step 3: Set SPAdes parameters
+#----------------------------------------------------------
+
+THREADS=4
+MEMORY=16             # in GB
+
+echo "Assembly using spades"
+
+#--------------------------------------------------------
+# Step 4: Loop through all trimmed paired-end fastq files
+#------------------------------------------------------------
+
+for f1 in "$INPUT_DIR"/*_1.trimmed.fastq.gz; do
+# Get corresponding read 2
+  f2="${f1/_1.trimmed.fastq.gz/_2.trimmed.fastq.gz}"
+  sample=$(basename "$f1" _1.trimmed.fastq.gz)
+
+  #echo "Assembling: $sample"
+
+#----------------------------------------------------------
+# Step 5: Run SPAdes
+#-----------------------------------------------------------
+  spades.py \
+    -1 "$f1" \
+    -2 "$f2" \
+    -o "$OUTPUT_DIR/$sample" \
+    --threads "$THREADS" \
+    --memory "$MEMORY"
+
+  echo "Done assembling!"
+done
+
+#### Step4 : QUAST
+
+#!/bin/bash
+
+# -------------------------------------------------------------
+# This script runs QUAST on all SPAdes assemblies in a directory.
+# For each sample (subdirectory), it finds contigs.fasta and runs
+# QUAST, saving the results in a separate output folder.
+# -------------------------------------------------------------
+
+#----------------------------------------------------------
+# Step 1: Specify input and output directories
+#--------------------------------------------------------
+INPUT_DIR="SPAdes_output"
+OUTPUT_DIR="quast_output"
+
+#------------------------------------------------------------------
+# Step 2: Create the output directory if it doesn't exist
+#-----------------------------------------------------------------
+mkdir -p "$OUTPUT_DIR"
+
+echo "Starting QUAST analysis for assemblies in $INPUT_DIR"
+
+#-----------------------------------------------------------------
+# Step 3: Loop over each subdirectory inside the SPAdes output
+#------------------------------------------------------------------
+for subdir in "$INPUT_DIR"/* ; do
+  # Step 3a: Check if it's a directory (to skip any non-folder files)
+  if [[ -d "$subdir" ]]; then
+
+    # Step 3b: Define the path to contigs.fasta
+    CONTIG_FILE="$subdir/contigs.fasta"
+
+    # Step 3c: Check if contigs.fasta exists
+    if [[ -f "$CONTIG_FILE" ]]; then
+      sample=$(basename "$subdir")
+      echo "Running QUAST on: $sample"
+
+      # Step 3d: Run QUAST and output results in a sample-named folder
+      quast.py "$CONTIG_FILE" -o "$OUTPUT_DIR/$sample"
+
+      echo "QUAST completed for: $sample"
+      
+
+    else
+      echo "Skipping $subdir — contigs.fasta not found."
+    fi
+
+  fi
+done
+
+echo "All QUAST analyses completed."
+
+#### Quast Summary
+
+#!/bin/bash
+
+# Define input and output directories
+INPUT_DIR="quast_output"
+QUAST_SUMMARY="quast_summary.tsv"
+
+# Write header for the summary table
+echo -e "Sample\t# contigs\tContigs ≥1kb\tTotal length\tLargest contig\tN50\tGC (%)" > "$QUAST_SUMMARY"
+
+# Loop through each QUAST report.tsv file
+for REPORT in "$INPUT_DIR"/*/report.tsv; do
+  if [[ -f "$REPORT" ]]; then
+
+    # Extract sample name from parent directory
+    SAMPLE=$(basename "$(dirname "$REPORT")")
+
+    # Extract metrics from the report
+    CONTIGS=$(grep -m 1 "^# contigs" "$REPORT" | cut -f2)
+    CONTIGS_GT_KB=$(grep -m 1 "^# contigs (>= 1000 bp)" "$REPORT" | cut -f2)
+    TOTAL_LENGTH=$(grep -m 1 "^Total length" "$REPORT" | cut -f2)
+    LARGEST_CONTIG=$(grep -m 1 "^Largest contig" "$REPORT" | cut -f2)
+    N50=$(grep -m 1 "^N50" "$REPORT" | cut -f2)
+    GC=$(grep -m 1 "^GC (%)" "$REPORT" | cut -f2)
+
+    # Append results to summary file
+    echo -e "${SAMPLE}\t${CONTIGS}\t${CONTIGS_GT_KB}\t${TOTAL_LENGTH}\t${LARGEST_CONTIG}\t${N50}\t${GC}" >> "$QUAST_SUMMARY"
+  else
+    echo "Report.tsv not found in $REPORT"
+  fi
+done
+
+echo "Summary of QUAST reports written to $QUAST_SUMMARY"
+
+#### Step5: Blast
+
+#!/bin/bash
+
+#==================================
+# This script runs blast on top 5 longest contigs from all samples
+#==================================
+
+# Directories for input and output
+CONTIGS_DIR="spades_contigs"
+EXTRACTED_DIR="extracted_contigs"     # extract top contigs from each contigs.fasta into this folder
+BLAST_RESULTS_DIR="blast_results"     # output
+DB_NAME="listeria_db"
+
+mkdir -p "$EXTRACTED_DIR"
+mkdir -p "$BLAST_RESULTS_DIR"
+
+# Number of contigs to extract
+NUM_CONTIGS=5
+
+# Loop through input directory, extract sample name
+for sample_fasta in "$CONTIGS_DIR"/*.fasta; do
+    sample_name=$(basename "$sample_fasta" .fasta)
+    echo "Processing sample: $sample_name"
+
+    # Extract top 5 longest contigs
+    extracted_fasta="$EXTRACTED_DIR/${sample_name}_top${NUM_CONTIGS}_contigs.fasta"
+
+    # Sorts the sequences in the input FASTA file by length -l, -r reverse the order (longest first)
+   # then selects the top N sequences, and saves them to a new FASTA file.
+    seqkit sort -l -r "$sample_fasta" | seqkit head -n $NUM_CONTIGS > "$extracted_fasta"
+
+    # if the file doen't exist, skip
+    if [[ ! -s "$extracted_fasta" ]]; then
+        echo "No sequences extracted for $sample_name, skipping BLAST."
+        continue
+    fi
+
+    # Run blastn
+    blast_out="$BLAST_RESULTS_DIR/${sample_name}_blast.txt"
+    blastn -query "$extracted_fasta" \
+           -db "$DB_NAME" \
+           -out "$blast_out" \
+           -outfmt "6 qseqid sseqid pident length evalue bitscore stitle" \
+           -max_target_seqs 5
+    
+    echo "BLAST done for $sample_name. Results: $blast_out"
+done
+
+echo "All done!"
+
+#### Step6 : kraken classification
+
+#!/bin/bash
+
+#========================================
+# This script runs Kraken2 on all contig FASTA files in a folder.
+# Outputs classification and report files for each sample.
+#==========================================
+
+# Path to downloaded Kraken2 database
+DB="/Volumes/Crucial X6/wgs_analysis_hackbio/minikraken_8GB_20200312"
+
+# Directory containing individual contig files
+CONTIG_DIR="/Volumes/Crucial X6/wgs_analysis_hackbio/spades_contigs"
+
+# Output directory
+OUTPUT_DIR="/Volumes/Crucial X6/wgs_analysis_hackbio/kraken_results"
+mkdir -p "$OUTPUT_DIR"
+
+# Loop through all .fasta files in the contigs directory
+for CONTIG in "$CONTIG_DIR"/*.fasta; do
+  SAMPLE_NAME=$(basename "$CONTIG" .fasta)
+
+  echo "Running Kraken2 on $SAMPLE_NAME..."
+
+  kraken2 \
+    --db "$DB" \
+    --output "$OUTPUT_DIR/${SAMPLE_NAME}_kraken.txt" \
+    --report "$OUTPUT_DIR/${SAMPLE_NAME}_report.txt" \
+    --use-names \
+    --threads 2 \
+    "$CONTIG"
+
+  echo "Finished $SAMPLE_NAME"
+done
+
+echo "All samples processed."
+
+#### Step7 : AMR gene detection - Abricate
+
+#!/bin/bash
+
+#===============================
+# Runs Abricate on contigs from each contigs.fasta file in SPAdes output folder (excluding SRR27013337).
+# Appends results with sample names to a combined output TSV file.
+#==============================
+
+INPUT_DIR="/home/maa/himabindu/results/SPAdes_output"
+OUTPUT_FILE="/home/maa/himabindu/reports/abricate_resf_results.tsv"  # You can change this
+DB="card"
+# Empty the output file first
+> "$OUTPUT_FILE"
+
+# loop through each subdirectory in the input folder
+for subdir in "$INPUT_DIR"/*; do
+  if [[ -d "$subdir" ]]; then
+    CONTIG_FILE="$subdir/contigs.fasta"     #get the contigs.fasta file and assign it to a variable CONTIG_FILE
+    SAMPLE_NAME=$(basename "$subdir")       # extract the sample name
+
+    # Check if contigs.fasta exists and is not from SRR27013337
+    if [[ -f "$CONTIG_FILE" && "$SAMPLE_NAME" != SRR27013337* ]]; then
+      echo "Running abricate on: $SAMPLE_NAME"
+
+      abricate --db "$DB" "$CONTIG_FILE" | sed "s/^/$SAMPLE_NAME\t/" >> "$OUTPUT_FILE"
+    else
+      echo "Skipping: $SAMPLE_NAME"
+    fi
+  fi
+done
+
+##### AMR prevalance
+
+# This script processes Abricate CARD output to clean and summarize AMR gene data.
+# It calculates resistance gene prevalence across samples and exports summary files.
+
+# Load required library
+library(dplyr)
+
+# Step 1: Read in the CARD database results from Abricate
+amr_card_data <- read.delim("abricate_card_results.tsv", header = TRUE, sep = "\t")
+
+# Step 2: Rename the first column to 'Sample' 
+colnames(amr_card_data)[1] <- "Sample"
+
+# Step 3: Select relevant columns for analysis
+amr_card_resgene_data <- amr_card_data %>%
+  select(Sample, GENE, X.COVERAGE, X.IDENTITY, PRODUCT, RESISTANCE)
+
+# Step 4: Clean the data
+# Remove repeated header-like rows accidentally included during file generation
+amr_card_resgene_data_clean <- amr_card_resgene_data %>%
+  filter(
+    GENE != "GENE",
+    X.COVERAGE != "%COVERAGE",
+    X.IDENTITY != "%IDENTITY",
+    PRODUCT != "PRODUCT",
+    RESISTANCE != "RESISTANCE"
+  ) %>%
+  rename(
+    `%COVERAGE` = X.COVERAGE,
+    `%IDENTITY` = X.IDENTITY
+  )
+
+# Step 5: Count total number of unique samples
+total_samples <- n_distinct(amr_card_resgene_data_clean$Sample)
+
+# Step 6: Group data by RESISTANCE class and compute summary statistics
+amr_summary <- amr_card_resgene_data_clean %>%
+  group_by(RESISTANCE) %>%
+  summarise(
+    sample_count = n_distinct(Sample),
+    prevalence = (sample_count / total_samples) * 100
+  ) %>%
+  arrange(desc(prevalence))  # Sort by most prevalent resistance class
+
+# Step 7: Export the results to CSV files
+write.csv(amr_card_resgene_data_clean, "abricate_card_clean.csv", row.names = FALSE)
+write.csv(amr_summary, "resistance_gene_prevalence.csv", row.names = FALSE)
+
+
+#### Virulence factor analysis
+
+#!/bin/bash
+
+#========================================
+# Run Abricate with the vfdb database on SPAdes contigs (excluding SRR27013337).
+# Results are appended to a combined TSV file with sample names prefixed.
+#====================================
+
+# Set input and outputs
+INPUT_DIR="/home/maa/himabindu/results/SPAdes_output"
+OUTPUT_FILE="/home/maa/himabindu/reports/abricate_resf_results.tsv"  # You can change this
+DB="vfdb"
+# Empty the output file first
+> "$OUTPUT_FILE"
+
+# loop through each subdirectory in the input folder
+for subdir in "$INPUT_DIR"/*; do
+  if [[ -d "$subdir" ]]; then
+    CONTIG_FILE="$subdir/contigs.fasta"     #get the contigs.fasta file and assign it to a variable CONTIG_FILE
+    SAMPLE_NAME=$(basename "$subdir")       # extract the sample name
+
+    # Check if contigs.fasta exists and is not from SRR27013337
+    if [[ -f "$CONTIG_FILE" && "$SAMPLE_NAME" != SRR27013337* ]]; then
+      echo "Running abricate on: $SAMPLE_NAME"
+
+      abricate --db "$DB" "$CONTIG_FILE" | sed "s/^/$SAMPLE_NAME\t/" >> "$OUTPUT_FILE"
+    else
+      echo "Skipping: $SAMPLE_NAME"
+    fi
+  fi
+done
+
+#### VF prevalance
+
+# This script processes Abricate vfdb output to clean and summarize virulence factor data.
+# It calculates virulence factor gene prevalence across samples and exports summary files.
+
+
+# Load necessary library
+library(dplyr)
+
+# Step 1: Load the Abricate output file (VFDB results)
+virulence_factor_data <- read.delim("abricate_vfdb_results.tsv", header = TRUE, sep = "\t")
+
+# Step 2: Rename the first column to 'Sample' 
+colnames(virulence_factor_data)[1] <- "Sample"
+
+# Step 3: Clean and select relevant columns from the dataset
+# Remove header rows accidentally included in the data (if present), and keep only necessary columns
+
+virulence_factor_data_clean <- virulence_factor_data %>%
+  select(Sample, GENE, X.COVERAGE, X.IDENTITY, ACCESSION, PRODUCT) %>%
+  filter(
+    GENE != "GENE",                          # Remove repeated header rows
+    X.COVERAGE != "%COVERAGE",
+    X.IDENTITY != "%IDENTITY",
+    PRODUCT != "PRODUCT",
+    ACCESSION != "ACCESSION"
+  ) %>%
+  rename(
+    "%COVERAGE" = X.COVERAGE,
+    "%IDENTITY" = X.IDENTITY
+  )
+
+# Step 4: Calculate the total number of unique samples
+total_samples <- length(unique(virulence_factor_data_clean$Sample))
+
+# Step 5: Summarise virulence factor prevalence across all samples
+virulence_factor_summary <- virulence_factor_data_clean %>%
+  group_by(GENE) %>%
+  summarise(
+    sample_count = n_distinct(Sample),                     # Number of unique samples carrying the gene
+    prevalence = (sample_count / total_samples) * 100      # Prevalence as a percentage
+  ) %>%
+  arrange(desc(prevalence))                                # Sort by prevalence in descending order
+
+# Step 6: Save the cleaned detailed data and summary to CSV files
+write.csv(virulence_factor_data_clean, "abricate_vfdb_clean.csv", row.names = FALSE)
+write.csv(virulence_factor_summary, "virulence_factor_prevalence.csv", row.names = FALSE)
+
+
+#LinkedIn post: https://www.linkedin.com/feed/update/urn:li:activity:7373785520495259649/
+
+# Github: https://github.com/himabindu-github/Hackbio-Aug25/tree/main/Stage%201
