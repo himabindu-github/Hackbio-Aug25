@@ -6,7 +6,7 @@
 #===============================
 
 INPUT_DIR="/home/maa/himabindu/results/SPAdes_output"
-OUTPUT_FILE="/home/maa/himabindu/reports/abricate_resf_results.tsv"  # You can change this
+OUTPUT_FILE="/home/maa/himabindu/reports/abricate_card_results.tsv"  # You can change this
 DB="card"
 
 # Check if input directory exists
