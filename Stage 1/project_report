@@ -783,6 +783,17 @@ write.csv(virulence_factor_summary, "virulence_factor_prevalence.csv", row.names
 # Some LLS cluster genes (llsA, llsX, llsY) also showed near-complete presence, though a few like llsH had slightly lower identity or coverage in some samples.
 # This widespread distribution of virulence determinants reinforces the highly virulent nature of the outbreak strains, suggesting that all isolates possess the genetic machinery necessary for effective host invasion and infection.
 
+# We did MLST to see how closely related the isolates are and confirm if they come from the same source.  
+# This helps us understand the outbreak better and supports the virulence gene findings.
+# MLST analysis identified all Listeria monocytogenes samples as Sequence Type 6 (ST6) within Clonal Complex 6 (CC6),
+# indicating a single clonal strain caused the outbreak. This genetic uniformity confirms a common source,
+# aiding epidemiological tracking and source identification. Previous studies have shown CC6 is commonly associated with meat samples,
+# supporting its relevance in foodborne outbreaks. MLST provides precise strain-level resolution,
+# enhancing outbreak investigation and informing targeted control measures to prevent future infections.
+
+
+Ask ChatGPT
+
 
 #LinkedIn post: https://www.linkedin.com/feed/update/urn:li:activity:7373785520495259649/
 
