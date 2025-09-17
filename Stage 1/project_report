@@ -82,6 +82,9 @@ echo "All files downloaded to '$TARGET_DIR/'"
 
 
 #### Step2: QC
+# Perform quality control (QC) on raw reads using FastQC and MultiQC to assess read quality, adapter contamination, and GC content.
+# Identify issues like low-quality bases or adapters, then trim and filter reads using fastp or Trimmomatic.
+# Ensures high-quality data for accurate assembly and downstream analysis.
 
 #!/bin/bash
 
