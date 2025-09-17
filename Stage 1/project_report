@@ -773,6 +773,12 @@ virulence_factor_summary <- virulence_factor_data_clean %>%
 write.csv(virulence_factor_data_clean, "abricate_vfdb_clean.csv", row.names = FALSE)
 write.csv(virulence_factor_summary, "virulence_factor_prevalence.csv", row.names = FALSE)
 
+# Results:
+# The virulence genes detected were consistently present across nearly all samples analyzed, indicating a high prevalence of key pathogenicity factors in the outbreak strains.
+# For example, essential genes from LIPI-1 (hly, mpl, actA, plcA, plcB, prfA) and adhesion genes (lap, inlA, inlB) were found in 100% of samples, highlighting the uniform virulence potential among isolates.
+# Some LLS cluster genes (llsA, llsX, llsY) also showed near-complete presence, though a few like llsH had slightly lower identity or coverage in some samples.
+# This widespread distribution of virulence determinants reinforces the highly virulent nature of the outbreak strains, suggesting that all isolates possess the genetic machinery necessary for effective host invasion and infection.
+
 
 #LinkedIn post: https://www.linkedin.com/feed/update/urn:li:activity:7373785520495259649/
 
