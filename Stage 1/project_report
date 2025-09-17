@@ -9,7 +9,8 @@
 # Methods
 ###########################################################
 
-#### Step1: Data download and set up
+#### Module 1: Data download and set up
+#------------------------------------------------------------
 # Download raw sequencing data (.fastq.gz) for 50 samples from ENA using curl commands.
 # Organize downloaded files into raw_data_wgs/ with clear, consistent filenames.
 # This streamlines data management and prepares files for downstream analysis.
@@ -84,13 +85,13 @@ done < "$URL_FILE"       # Feed the file line by line to the while loop
 echo "All files downloaded to '$TARGET_DIR/'"
 
 
-#### Step2: QC
+#### Module 2: QC
+#-------------------------------------------------------------------------
 # Perform quality control (QC) on raw reads using FastQC and MultiQC to assess read quality, adapter contamination, and GC content.
 # Identify issues like low-quality bases or adapters, then trim and filter reads using fastp or Trimmomatic.
 # Ensures high-quality data for accurate assembly and downstream analysis.
 
 #!/bin/bash
-
 
 #==========================================
 #This script performs quality control (QC) and read trimming for raw WGS FASTQ files using FastQC, fastp, and MultiQC.
@@ -162,14 +163,19 @@ multiqc "$FASTQC_TRIMMED_DIR" "$OUTPUT_DIR" -o "$MULTIQC_TRIMMED_DIR"
 
 echo "Done!"
 
-##### Step3 : Genome assembly
+# Results:
+# Initial QC of 50 samples showed good base quality and expected GC content, but some adapter contamination and high duplication.
+# Post-trimming with fastp reduced adapters and duplicates, improving overall read quality for reliable downstream analysis.
+# Nextera XT library prep can cause sequence bias in the first ~12 bases, triggering expected FastQC warnings not indicative of poor quality.
+
+##### Module 3 : Genome assembly
+# -----------------------------------------------------
 
 #!/bin/bash
 
 #=============================
 # This script performs SPAdes assembly (de novo assembly) on fastq reads that are processed
 #==============================
-
 
 #------------------------------------------------------
 # Step 1: Set input and output directories
