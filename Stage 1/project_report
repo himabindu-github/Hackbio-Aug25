@@ -774,6 +774,12 @@ write.csv(virulence_factor_summary, "virulence_factor_prevalence.csv", row.names
 # Multilocus Sequence Typing (MLST) provided precise strain-level resolution to support epidemiological tracking and outbreak source identification.
 # Future improvements should include phenotypic antibiotic susceptibility testing, monitoring for horizontal gene transfer, and expanded genomic surveillance to better understand resistance mechanisms and inform clinical management.
 
+# Whole Genome Sequencing (WGS) is a powerful method used in outbreak investigations to get detailed and accurate information about the pathogens involved.
+# It helps identify the exact species and strain, track how the infection spread, and find where the contamination came from.
+# WGS also detects important features like antibiotic resistance and virulence genes, which help guide treatment and public health actions.
+# In this study, WGS confirmed Listeria monocytogenes as the cause, showed all samples came from the same strain (ST6/CC6), 
+# and identified both resistance and virulence profiles to support antibiotic recommendations.
+# This shows how WGS can be used not just for outbreak response, but also for ongoing monitoring of foodborne pathogens.
 
 
 
