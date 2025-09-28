@@ -609,7 +609,7 @@ cor.test(age, pca_res$x[, 2])
 
 This PCA plot visualizes how samples cluster by their gene expression profiles, helping to identify patterns or batch effects related to experimental conditions.
 
-![PCA Plot of Samples](/Users/himabindukumdam/Documents/Documents/hackbio_bash/Hackbio-Aug25/Stage2/bipolar_rnaseq/results/pca_plot.pdf)
+![PCA Plot of Samples](/Users/himabindukumdam/Documents/Documents/hackbio_bash/Hackbio-Aug25/Stage2/bipolar_rnaseq/results/pca_plot.png)
 
 ---
 ####  PCA Summary
