@@ -1201,10 +1201,10 @@ In the **FBD vs FHC** dot plot, enrichment is observed predominantly in **morpho
 
 ### Compare shared and unique DEGs: SBD vs FBD
 
-# This section identifies overlapping and unique differentially expressed genes (DEGs)
-# between SBD vs SHC and FBD vs FHC contrasts.
-# Then it performs GO enrichment on each set to identify biological processes
-# and highlights immune- and neuronal-related functions.
+- This section identifies overlapping and unique differentially expressed genes (DEGs)
+- between SBD vs SHC and FBD vs FHC contrasts.
+- Then it performs GO enrichment on each set to identify biological processes
+- and highlights immune- and neuronal-related functions.
 
 ```
 # Define gene lists
