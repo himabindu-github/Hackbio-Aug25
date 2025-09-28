@@ -754,7 +754,111 @@ pheatmap(log_deg_counts,
 ![PCA Plot of Samples](results/figures/combined_heatmap.png)
 
 
-## End of Pipeline
+### 10. Functional Enrichment
+
+```r
+# Continuing from the previous heatmap step where DEGs between SBD and SHC were identified,
+# we now perform pathway enrichment analysis to understand the biological processes
+# associated with these differentially expressed genes (DEGs).
+
+##########################
+# Install and load necessary Bioconductor packages for enrichment analysis
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("clusterProfiler")   # For enrichment analysis
+BiocManager::install("org.Hs.eg.db")      # Human gene annotation database
+
+library(clusterProfiler)
+library(org.Hs.eg.db)
+
+##########################
+# Extract gene symbols from DEG results for each comparison
+genes_sbd_shc <- rownames(deg_sbd_shc)
+genes_fbd_fhc <- rownames(deg_fbd_fhc)
+genes_sbd_fbd <- rownames(deg_sbd_fbd)
+
+##########################
+# Map gene symbols to Entrez IDs (required for enrichment analysis)
+entrez_sbd_shc <- bitr(genes_sbd_shc, fromType = "SYMBOL",
+                       toType = "ENTREZID",
+                       OrgDb = org.Hs.eg.db)
+
+entrez_fbd_fhc <- bitr(genes_fbd_fhc, fromType = "SYMBOL",
+                       toType = "ENTREZID",
+                       OrgDb = org.Hs.eg.db)
+
+entrez_sbd_fbd <- bitr(genes_sbd_fbd, fromType = "SYMBOL",
+                       toType = "ENTREZID",
+                       OrgDb = org.Hs.eg.db)
+
+##########################
+# Optional: Remove duplicated Entrez IDs to avoid redundancy
+entrez_sbd_shc <- entrez_sbd_shc[!duplicated(entrez_sbd_shc$ENTREZID), ]
+entrez_fbd_fhc <- entrez_fbd_fhc[!duplicated(entrez_fbd_fhc$ENTREZID), ]
+entrez_sbd_fbd <- entrez_sbd_fbd[!duplicated(entrez_sbd_fbd$ENTREZID), ]
+
+##########################
+# Prepare background gene list for enrichment (all genes tested)
+all_genes <- rownames(dds)  # Use all genes from DESeq2 object
+
+background_entrez <- bitr(all_genes, fromType = "SYMBOL", 
+                         toType = "ENTREZID", 
+                         OrgDb = org.Hs.eg.db)
+
+##########################
+# Perform Gene Ontology (GO) Biological Process (BP) enrichment analysis
+# for each DEG set against the background gene universe
+
+ego_sbd_shc <- enrichGO(
+  gene          = entrez_sbd_shc$ENTREZID,      # DEG Entrez IDs
+  universe      = background_entrez$ENTREZID,  # Background Entrez IDs
+  OrgDb         = org.Hs.eg.db,
+  keyType       = "ENTREZID",
+  ont           = "BP",                         # Biological Process ontology
+  pAdjustMethod = "BH",                         # Benjamini-Hochberg correction
+  pvalueCutoff  = 0.05,                         # Significance threshold
+  qvalueCutoff  = 0.1
+)
+
+ego_fbd_fhc <- enrichGO(
+  gene          = entrez_fbd_fhc$ENTREZID,
+  universe      = background_entrez$ENTREZID,
+  OrgDb         = org.Hs.eg.db,
+  keyType       = "ENTREZID",
+  ont           = "BP",
+  pAdjustMethod = "BH",
+  pvalueCutoff  = 0.05,
+  qvalueCutoff  = 0.1
+)
+
+ego_sbd_fbd <- enrichGO(
+  gene          = entrez_sbd_fbd$ENTREZID,
+  universe      = background_entrez$ENTREZID,
+  OrgDb         = org.Hs.eg.db,
+  keyType       = "ENTREZID",
+  ont           = "BP",
+  pAdjustMethod = "BH",
+  pvalueCutoff  = 0.05,
+  qvalueCutoff  = 0.1
+)
+
+##########################
+# Convert enrichment results to data frames for easier manipulation
+
+df_ego_sbd_shc <- as.data.frame(ego_sbd_shc)
+df_ego_fbd_fhc <- as.data.frame(ego_fbd_fhc)
+df_ego_sbd_fbd <- as.data.frame(ego_sbd_fbd)
+
+##########################
+# Filter GO terms for relevance by keywords related to 
+# immune, neurological, synaptic, phagosome, lysosome, signaling, MAPK pathways
+keywords <- "immune|neuro|synap|phagosome|lysosome|signal|MAPK"
+
+relevant_ego_sbd_shc <- df_ego_sbd_shc[grep(keywords, df_ego_sbd_shc$Description, ignore.case = TRUE), ]
+relevant_ego_fbd_fhc <- df_ego_fbd_fhc[grep(keywords, df_ego_fbd_fhc$Description, ignore.case = TRUE), ]
+relevant_ego_sbd_fbd <- df_ego_sbd_fbd[grep(keywords, df_ego_sbd_fbd$Description, ignore.case = TRUE), ]
+
 
 
 
