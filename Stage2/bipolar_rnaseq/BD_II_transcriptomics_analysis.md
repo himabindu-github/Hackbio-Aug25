@@ -571,6 +571,7 @@ ggplot(pcaData, aes(PC1, PC2, color = condition)) +
   ylab(paste0("PC2: ", percentVar[2], "% variance")) +
   ggtitle("PCA of Samples") +
   theme_minimal()
+```
 
 
 ---
@@ -578,26 +579,59 @@ ggplot(pcaData, aes(PC1, PC2, color = condition)) +
 ###  6. PCA Colored by Age
 
 ```r
+# Define the age vector corresponding to each sample
 age <- c(33, 28, 36, 38, 24, 25, 45, 67)
+
+# Create a metadata dataframe combining condition and age for each sample
 metadata <- data.frame(
   Condition = colData(dds)$condition,
   Age = age
 )
 
+# Visualize PCA results with individuals colored by age
+# This helps explore if age correlates with variation in the data
 fviz_pca_ind(pca_res,
-             geom.ind = "point",
-             col.ind = age,
-             addEllipses = FALSE,
+             geom.ind = "point",    # plot points for individuals
+             col.ind = age,         # color points by age
+             addEllipses = FALSE,   # no group ellipses since age is continuous
              legend.title = "Age",
-             repel = TRUE)
+             repel = TRUE)          # avoid overlapping labels
 
-# Correlations
+# Test correlation between age and PC1 scores to see if age explains variation along PC1
 cor.test(age, pca_res$x[, 1])
+
+# Test correlation between age and PC2 scores to see if age explains variation along PC2
 cor.test(age, pca_res$x[, 2])
 ```
 
 ---
+####  PCA Summary
 
+- **Principal Component Analysis (PCA)** was conducted on variance-stabilized data to explore global gene expression patterns across sample groups (SBD, FBD, SHC, FHC).
+- The **first two principal components** explained ~63% of the total variance:
+  - **PC1:** 43.5%
+  - **PC2:** 20%
+
+####  Observations:
+
+- SHC samples (ages 24 & 25) clustered closely, showing consistent expression profiles.
+- FHC samples (ages 45 & 67) were more dispersed, suggesting greater variability.
+- SBD and FBD samples showed partial grouping, possibly influenced by age differences.
+- One-way **ANOVA on PC1 and PC2** showed no significant group differences:
+  - PC1: *p = 0.956*
+  - PC2: *p = 0.371*
+
+####  Age as a Covariate:
+
+- **Correlation with PC2:**  
+  - Significant positive correlation with age (r = 0.72, *p = 0.043*)
+- **Correlation with PC1:**  
+  - Not significant (r = -0.51, *p = 0.19*)
+
+**Conclusion:**  
+PC2 likely captures **age-related gene expression variation**, suggesting **age may be a confounding factor**. Further modeling including age as a covariate is recommended.
+
+---
 ###  7. Volcano Plots
 
 #### a. SBD vs SHC
