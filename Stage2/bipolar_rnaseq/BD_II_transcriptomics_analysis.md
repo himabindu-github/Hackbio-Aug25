@@ -1383,6 +1383,17 @@ cnetplot(ego_fbd_unique,
 ```
 ![cnet plot](results/figures/cen_shared.png)
 
+###  Summary: Integrative Transcriptomic Insights in BD-II
+
+Comparative analysis of DEGs across SBD and FBD subtypes, combined with GO enrichment and cnetplot visualization, reveals:
+
+- **Shared DEGs** involve synaptic pruning, dopaminergic signaling, and cytokine pathways — pointing to core BD-II mechanisms.
+- **SBD-specific DEGs** highlight immune activation and inflammatory signaling.
+- **FBD-specific DEGs** are enriched for developmental and morphogenesis pathways.
+
+This suggests a **distinct immune vs neurodevelopmental dichotomy** between sporadic and familial BD-II, providing mechanistic insight and potential targets for subtype-specific interventions.
+
+
 
 
 
