@@ -883,6 +883,64 @@ keywords <- "immune|neuro|synap|phagosome|lysosome|signal|MAPK"
 relevant_ego_sbd_shc <- df_ego_sbd_shc[grep(keywords, df_ego_sbd_shc$Description, ignore.case = TRUE), ]
 relevant_ego_fbd_fhc <- df_ego_fbd_fhc[grep(keywords, df_ego_fbd_fhc$Description, ignore.case = TRUE), ]
 relevant_ego_sbd_fbd <- df_ego_sbd_fbd[grep(keywords, df_ego_sbd_fbd$Description, ignore.case = TRUE), ]
+ ```
+
+### KEGG Pathway Enrichment Analysis
+
+After performing Gene Ontology (GO) enrichment to identify biological processes associated with differentially expressed genes (DEGs), we conduct KEGG pathway enrichment analysis to further explore relevant signaling and metabolic pathways.
+
+KEGG (Kyoto Encyclopedia of Genes and Genomes) provides curated pathway maps, helping to link gene lists to specific molecular interaction networks and cellular processes.
+
+This step helps to:
+- Identify pathways significantly enriched among DEGs.
+- Gain insights into biological mechanisms potentially impacted in the different conditions (e.g., SBD vs SHC).
+- Complement GO analysis by focusing on well-defined biochemical and signaling pathways.
+
+
+```r
+library(clusterProfiler)
+
+# Function to perform KEGG enrichment for a given set of DEGs and background
+perform_kegg_enrichment <- function(deg_entrez_df, background_entrez_df, organism = "hsa",
+                                   pvalueCutoff = 0.05, qvalueCutoff = 0.1) {
+  # deg_entrez_df: data.frame with at least a column named "ENTREZID" containing DEG Entrez IDs
+  # background_entrez_df: data.frame with at least a column named "ENTREZID" for background genes
+  # organism: KEGG organism code (default "hsa" for human)
+  # pvalueCutoff: p-value threshold for significance
+  # qvalueCutoff: q-value (FDR) threshold for significance
+
+  enrichment_results <- enrichKEGG(
+    gene         = deg_entrez_df$ENTREZID,
+    organism     = organism,
+    keyType      = "kegg",
+    pvalueCutoff = pvalueCutoff,
+    qvalueCutoff = qvalueCutoff,
+    universe     = background_entrez_df$ENTREZID
+  )
+  
+  # Return the enrichment results object
+  return(enrichment_results)
+}
+
+# Run KEGG enrichment for your comparisons:
+kegg_sbd_shc <- perform_kegg_enrichment(entrez_sbd_shc, background_entrez)
+kegg_fbd_fhc <- perform_kegg_enrichment(entrez_fbd_fhc, background_entrez)
+kegg_sbd_fbd <- perform_kegg_enrichment(entrez_sbd_fbd, background_entrez)
+
+# Convert to data frames for easier viewing and filtering:
+df_kegg_sbd_shc <- as.data.frame(kegg_sbd_shc)
+df_kegg_fbd_fhc <- as.data.frame(kegg_fbd_fhc)
+df_kegg_sbd_fbd <- as.data.frame(kegg_sbd_fbd)
+
+# Filter relevant pathways by keywords
+filter_keywords <- "immune|neuro|synap|phagosome|lysosome|signal|MAPK"
+
+relevant_kegg_sbd_shc <- df_kegg_sbd_shc[grep(filter_keywords, df_kegg_sbd_shc$Description, ignore.case = TRUE), ]
+relevant_kegg_fbd_fhc <- df_kegg_fbd_fhc[grep(filter_keywords, df_kegg_fbd_fhc$Description, ignore.case = TRUE), ]
+relevant_kegg_sbd_fbd <- df_kegg_sbd_fbd[grep(filter_keywords, df_kegg_sbd_fbd$Description, ignore.case = TRUE), ]
+
+# Print filtered KEGG pathways for SBD vs SHC comparison
+print(relevant_kegg_sbd_shc)
 
 
 
