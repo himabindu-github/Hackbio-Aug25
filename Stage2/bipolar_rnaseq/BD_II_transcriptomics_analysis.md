@@ -718,6 +718,8 @@ pheatmap(log_norm_counts_deg,
 
 #### b. FBD vs FHC
 
+![PCA Plot of Samples](results/figures/pca_plot.png)
+
 _Repeat using `res_fbd_fhc`._
 
 ---
