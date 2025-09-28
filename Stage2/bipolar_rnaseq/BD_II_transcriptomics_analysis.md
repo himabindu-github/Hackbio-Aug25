@@ -678,7 +678,7 @@ ggplot(res_df_s, aes(x = log2FoldChange, y = -log10(padj), color = sig)) +
 _Repeat for FBD vs FHC and SBD vs FBD._
 
 ---
-![Volcano Plots](results/figures/sbd_shc_volcano.pdf)
+![Volcano Plots](results/figures/sbd_shc_volcano.png)
 
 ---
 
@@ -718,7 +718,7 @@ pheatmap(log_norm_counts_deg,
 
 #### b. FBD vs FHC
 
-![PCA Plot of Samples](results/figures/combined_heatmap.png)
+
 
 _Repeat using `res_fbd_fhc`._
 
@@ -751,6 +751,8 @@ pheatmap(log_deg_counts,
 ```
 
 ---
+![PCA Plot of Samples](results/figures/combined_heatmap.png)
+
 
 ## End of Pipeline
 
