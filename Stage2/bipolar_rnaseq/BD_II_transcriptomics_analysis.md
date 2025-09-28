@@ -173,5 +173,16 @@ echo "All samples processed. Trimmed files in: $OUTPUT_DIR"
 echo "Fastp reports saved to: $REPORT_DIR"
 
 ```
+### Quality Control Summary
+
+- **FastQC** revealed:
+  - High sequence quality across all samples.
+  - Presence of duplicated and overrepresented sequences in a few samples, particularly **SRR33243171_1**, which showed the highest duplication rate (**38.9%**).
+
+- **Fastp** filtering results:
+  - All samples retained **>42 million** reads after filtering, indicating good sequencing depth.
+  - **GC content** ranged from **46.9% to 50.9%**, consistent with expected human transcriptome profiles.
+  - **Adapter contamination was low**, with **<1.5% adapter content** in all samples.
+  - Over **99% of reads passed filtering (PF)** in every sample, demonstrating high sequencing quality.
 
 
