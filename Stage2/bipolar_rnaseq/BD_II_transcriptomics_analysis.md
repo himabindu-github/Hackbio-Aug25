@@ -42,7 +42,7 @@ Bipolar Disorder Type II (BD-II) is a chronic psychiatric condition characterize
 - **Tools**: `fastqc`, `fastp`
 - Downloaded 8 RNA-Seq samples: 2 each from SBD, FBD, SHC, and FHC.
 - Performed adapter removal and read quality trimming.
-
+---
 ```
   #!/bin/bash
 
@@ -92,6 +92,7 @@ wget -nc -P "$OUTPUT_DIR" ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR332/069/SRR33243
 
 echo "Download complete. Files saved to: $OUTPUT_DIR"
 ```
+---
 ```
 #!/bin/bash
 
@@ -123,6 +124,7 @@ fastqc "$INPUT_DIR"/*.fastq.gz -o "$OUTPUT_DIR_FASTQC"
 echo "FastQC completed. Reports saved to: $OUTPUT_DIR_FASTQC"
 
 ```
+---
 ```
 #!/bin/bash
 # ================================
@@ -173,6 +175,7 @@ echo "All samples processed. Trimmed files in: $OUTPUT_DIR"
 echo "Fastp reports saved to: $REPORT_DIR"
 
 ```
+---
 ### Quality Control Summary
 
 - **FastQC** revealed:
