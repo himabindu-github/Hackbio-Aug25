@@ -758,6 +758,106 @@ plot_volcano(res_df_f, "Volcano Plot: FBD vs FHC",
 ---
 ![Volcano Plots](results/figures/sbd_fbd_volcano.png)
 
+
+
+---
+
+### Comparing top Differentially Expressed Genes (DEGs) across conditions
+
+In this section, we compare the top 20 DEGs from each contrast:
+- **SBD vs SHC** (sporadic vs control)
+- **FBD vs FHC** (familial vs control)
+- **SBD vs FBD** (sporadic vs familial)
+
+This comparison helps identify shared and unique genes, as well as their regulation patterns across conditions.
+
+
+```r
+########################################
+# Compare Top 20 Differentially Expressed Genes
+########################################
+
+# data frames :
+# - top_genes_s: Top DEGs in SBD vs SHC
+# - top_genes_f: Top DEGs in FBD vs FHC
+# - top_genes_bd: Top DEGs in SBD vs FBD
+
+
+# Extract gene names and their significance status
+df1 <- top_genes_s[, c("gene", "sig")]
+df2 <- top_genes_f[, c("gene", "sig")]
+df3 <- top_genes_bd[, c("gene", "sig")]
+
+# Rename 'sig' column to indicate each comparison
+colnames(df1)[2] <- "SBD_vs_SHC"
+colnames(df2)[2] <- "FBD_vs_FHC"
+colnames(df3)[2] <- "SBD_vs_FBD"
+
+
+# Merge all three data frames by gene
+comparison_df <- full_join(df1, df2, by = "gene") %>%
+  full_join(., df3, by = "gene") %>%
+  arrange(gene)
+
+# Replace NA (missing values) with "-"
+comparison_df[is.na(comparison_df)] <- "-"
+
+# View the comparison table
+print(comparison_df)
+
+# Save to CSV 
+write.csv(comparison_df, "Top20_DEGs_Comparison.csv", row.names = FALSE)
+```
+| Gene         | SBD_vs_SHC   | FBD_vs_FHC   | SBD_vs_FBD   |
+|--------------|--------------|--------------|--------------|
+| C1QB         | Upregulated  | Downregulated| Upregulated  |
+| C1QC         | Upregulated  | -            | -            |
+| CD180        | -            | -            | Upregulated  |
+| CD300LF      | Upregulated  | Downregulated| Upregulated  |
+| CD84         | -            | -            | Upregulated  |
+| CD84-AS1     | -            | -            | Upregulated  |
+| CILP         | -            | Upregulated  | -            |
+| COL15A1      | -            | Upregulated  | -            |
+| COL15A1-AS1  | -            | Upregulated  | -            |
+| CYP4F29P     | -            | -            | Upregulated  |
+| CYTH4        | -            | -            | Upregulated  |
+| DCN          | -            | Upregulated  | -            |
+| DDR1_2       | -            | Downregulated| -            |
+| FAM239A      | -            | Upregulated  | -            |
+| FCGBP        | Upregulated  | -            | -            |
+| FCGR3A       | Upregulated  | -            | -            |
+| GIMAP6       | -            | -            | Upregulated  |
+| HCG17_4      | -            | Upregulated  | -            |
+| HGF          | -            | Upregulated  | -            |
+| HLA-A        | Downregulated| -            | Downregulated|
+| HSD3B2       | -            | Upregulated  | -            |
+| KLRC2        | -            | Downregulated| -            |
+| LEP          | Downregulated| -            | -            |
+| LINC01235    | Upregulated  | -            | -            |
+| LINC02154    | -            | Downregulated| -            |
+| LOC105378027 | -            | Downregulated| -            |
+| LOC107984671 | Upregulated  | -            | -            |
+| LOC107986121 | -            | Downregulated| -            |
+| LOC124901298 | Downregulated| -            | Downregulated|
+| LOC124901761 | Upregulated  | -            | Upregulated  |
+| LY86         | -            | -            | Upregulated  |
+| MIR223HG     | Upregulated  | Downregulated| Upregulated  |
+| NCKAP1L      | Upregulated  | -            | -            |
+| NIPA2        | -            | -            | Downregulated|
+| NME8         | -            | Downregulated| -            |
+| P2RY13       | Upregulated  | -            | -            |
+| PIGR         | Upregulated  | -            | Upregulated  |
+| PLEK         | -            | -            | Upregulated  |
+| PPP1R11_6    | -            | -            | Upregulated  |
+| PSG7         | Downregulated| -            | -            |
+| PSPHP1       | -            | Downregulated| -            |
+| RETN         | Upregulated  | -            | -            |
+| RSPO2        | -            | Upregulated  | -            |
+| SPI1         | Upregulated  | -            | -            |
+| TLR10        | Upregulated  | Downregulated| Upregulated  |
+| VSIG4        | Upregulated  | -            | Upregulated  |
+| ZNF208       | -            | -            | Downregulated|
+
 ---
 #### Interpretation:
 
@@ -769,7 +869,9 @@ Genes like **CILP, COL15A1, COL15A1-AS1, DCN, and DDR1_2** show altered expressi
 
 Metabolic and signaling-related genes, including **CYP4F29P** and **CYTH4**, are specifically upregulated in sporadic disease, suggesting differences in lipid metabolism and intracellular signaling pathways.
 
----
+To investigate whether these pathways are functionally enriched, we will perform pathway enrichment analysis (GO/KEGG) in the downstream steps.
+
+
 ### 8. Heatmaps of DEGs
 
 #### a. SBD vs SHC
