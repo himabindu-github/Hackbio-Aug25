@@ -126,7 +126,8 @@ echo "FastQC completed. Reports saved to: $OUTPUT_DIR_FASTQC"
 ```
 #!/bin/bash
 # ================================
-# FASTP TRIMMING PIPELINE SCRIPT
+# Script: run_fastp.sh
+# Purpose: Run fastp on raw FASTQ files
 # ================================
 
 # Set paths to your directories
