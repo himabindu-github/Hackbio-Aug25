@@ -1199,6 +1199,92 @@ In the **SBD vs FBD** dot plot, processes related to **leukocyte mediated immuni
 In the **FBD vs FHC** dot plot, enrichment is observed predominantly in **morphogenesis-related** biological processes, suggesting developmental and structural changes may be key factors distinguishing these groups.
 
 
+### Compare shared and unique DEGs: SBD vs FBD
+
+# This section identifies overlapping and unique differentially expressed genes (DEGs)
+# between SBD vs SHC and FBD vs FHC contrasts.
+# Then it performs GO enrichment on each set to identify biological processes
+# and highlights immune- and neuronal-related functions.
+
+```
+# Define gene lists
+
+# genes_sbd_shc <- character vector of DEG symbols from SBD vs SHC
+# genes_fbd_fhc <- character vector of DEG symbols from FBD vs FHC
+
+#  1. Identify shared and unique DEGs
+shared_genes <- intersect(genes_sbd_shc, genes_fbd_fhc)
+unique_sbd_shc <- setdiff(genes_sbd_shc, genes_fbd_fhc)
+unique_fbd_fhc <- setdiff(genes_fbd_fhc, genes_sbd_shc)
+
+# 2. Print DEG counts
+cat("Number of DEGs in SBD vs SHC:", length(genes_sbd_shc), "\n")
+cat("Number of DEGs in FBD vs FHC:", length(genes_fbd_fhc), "\n")
+cat("Number of shared DEGs:", length(shared_genes), "\n")
+cat("Number of unique DEGs in SBD vs SHC:", length(unique_sbd_shc), "\n")
+cat("Number of unique DEGs in FBD vs FHC:", length(unique_fbd_fhc), "\n")
+
+
+# Convert Gene Symbols to Entrez IDs (for GO)
+
+shared_entrez <- bitr(shared_genes, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")$ENTREZID
+unique_sbd_shc_entrez <- bitr(unique_sbd_shc, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")$ENTREZID
+unique_fbd_fhc_entrez <- bitr(unique_fbd_fhc, fromType="SYMBOL", toType="ENTREZID", OrgDb="org.Hs.eg.db")$ENTREZID
+
+
+# GO Enrichment: Biological Process (BP)
+# pvalueCutoff and qvalueCutoff can be adjusted if needed
+
+ego_shared <- enrichGO(
+  gene = shared_entrez,
+  OrgDb = org.Hs.eg.db,
+  keyType = "ENTREZID",
+  ont = "BP",
+  pAdjustMethod = "BH",
+  pvalueCutoff = 0.05,
+  qvalueCutoff = 0.2
+)
+
+ego_sbd_unique <- enrichGO(
+  gene = unique_sbd_shc_entrez,
+  OrgDb = org.Hs.eg.db,
+  keyType = "ENTREZID",
+  ont = "BP",
+  pAdjustMethod = "BH",
+  pvalueCutoff = 0.05,
+  qvalueCutoff = 0.2
+)
+
+ego_fbd_unique <- enrichGO(
+  gene = unique_fbd_fhc_entrez,
+  OrgDb = org.Hs.eg.db,
+  keyType = "ENTREZID",
+  ont = "BP",
+  pAdjustMethod = "BH",
+  pvalueCutoff = 0.05,
+  qvalueCutoff = 0.2
+)
+
+
+# Filter GO terms for immune and neuro-related processes
+# Define keyword patterns for immune and neuronal processes
+immune_keywords <- "immune|cytokine|leukocyte|inflammatory|cytotoxic"
+neuro_keywords <- "synap|neuro|axon|dendrite|neuron|transmission|development"
+
+# Immune-related terms
+immune_terms_sbd <- ego_sbd_unique[grep(immune_keywords, ego_sbd_unique$Description, ignore.case = TRUE), ]
+immune_terms_fbd <- ego_fbd_unique[grep(immune_keywords, ego_fbd_unique$Description, ignore.case = TRUE), ]
+immune_terms_shared <- ego_shared[grep(immune_keywords, ego_shared$Description, ignore.case = TRUE), ]
+
+# Neuronal-related terms
+synaptic_terms_sbd <- ego_sbd_unique[grep(neuro_keywords, ego_sbd_unique$Description, ignore.case = TRUE), ]
+synaptic_terms_fbd <- ego_fbd_unique[grep(neuro_keywords, ego_fbd_unique$Description, ignore.case = TRUE), ]
+synaptic_terms_shared <- ego_shared[grep(neuro_keywords, ego_shared$Description, ignore.case = TRUE), ]
+
+```
+
+
+
 
 
 
