@@ -637,22 +637,34 @@ PC2 likely captures **age-related gene expression variation**, suggesting **age 
 #### a. SBD vs SHC
 
 ```r
+# After exploring overall sample variation with PCA, 
+# we perform differential expression analysis to identify genes that are significantly up- or downregulated between SBD and SHC conditions.
+# This volcano plot visualizes the relationship between fold change and statistical significance for each gene.
+
+# Convert DESeq2 results to a data frame and add gene names as a column
 res_df_s <- as.data.frame(res_sbd_shc) %>%
   mutate(gene = rownames(.)) %>%
+  
+  # Remove rows with NA adjusted p-values
   filter(!is.na(padj)) %>%
+  
+  # Create a new column 'sig' to classify genes as Upregulated, Downregulated, or Not significant
   mutate(sig = case_when(
-    padj < 0.1 & log2FoldChange > 1 ~ "Upregulated",
-    padj < 0.1 & log2FoldChange < -1 ~ "Downregulated",
-    TRUE ~ "Not significant"
+    padj < 0.1 & log2FoldChange > 1  ~ "Upregulated",    # Significant upregulated genes
+    padj < 0.1 & log2FoldChange < -1 ~ "Downregulated",  # Significant downregulated genes
+    TRUE                            ~ "Not significant"   # All others
   ))
 
+# Generate a volcano plot using ggplot2
 ggplot(res_df_s, aes(x = log2FoldChange, y = -log10(padj), color = sig)) +
-  geom_point(alpha = 0.7, size = 1.8) +
-  geom_vline(xintercept = c(-1, 1), linetype = "dashed") +
-  geom_hline(yintercept = -log10(0.1), linetype = "dashed") +
-  scale_color_manual(values = c("Upregulated" = "red", "Downregulated" = "blue", "Not significant" = "gray")) +
-  theme_minimal() +
-  labs(title = "Volcano Plot: SBD vs SHC")
+  geom_point(alpha = 0.7, size = 1.8) +                          # Scatter plot points with transparency and size
+  geom_vline(xintercept = c(-1, 1), linetype = "dashed") +       # Vertical dashed lines at log2FC = -1 and 1
+  geom_hline(yintercept = -log10(0.1), linetype = "dashed") +    # Horizontal dashed line at adjusted p-value = 0.1
+  scale_color_manual(values = c("Upregulated" = "red",           # Color scheme for significance
+                                "Downregulated" = "blue",
+                                "Not significant" = "gray")) +
+  theme_minimal() +                                               # Clean minimal theme
+  labs(title = "Volcano Plot: SBD vs SHC")                       # Plot title
 ```
 
 _Repeat for FBD vs FHC and SBD vs FBD._
