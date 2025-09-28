@@ -1395,6 +1395,99 @@ Comparative analysis of DEGs across SBD and FBD subtypes, combined with GO enric
 
 This suggests a **distinct immune vs neurodevelopmental dichotomy** between sporadic and familial BD-II, providing mechanistic insight and potential targets for subtype-specific interventions.
 
+---
+## Interpretative Summary 
+
+### Background
+
+In this analysis, we performed a comparative transcriptomic study between:
+
+- **Sporadic BD-II (SBD) vs Healthy Controls (SHC)**
+- **Familial BD-II (FBD) vs Healthy Controls (FHC)**
+- **SBD vs FBD**
+
+This integrative analysis aimed to uncover **common and distinct molecular alterations** underlying bipolar disorder type II (BD-II), and to identify candidate **biomarkers and therapeutic pathways** that may differ between familial and sporadic cases.
+
+---
+
+### Common Molecular Alterations (Shared DEGs)
+
+**Enriched Biological Processes**:
+
+- Synapse pruning  
+- Dopaminergic neuron differentiation  
+- Cytokine-mediated signaling  
+- Reproductive system development  
+
+**Interpretation**:  
+These shared transcriptional signatures point to **core pathophysiological mechanisms** in BD-II. Processes like synaptic remodeling and dopaminergic signaling are consistent with BD-related neuroplasticity, while immune involvement (e.g., cytokine signaling) reflects the known immune-neuropsychiatric link.
+
+**Implication**:  
+Genes involved in these pathways may serve as **foundational biomarkers** or **broad-spectrum therapeutic targets** across BD-II subtypes.
+
+---
+
+### SBD-Specific Alterations
+
+**Enriched Biological Processes**:
+
+- Leukocyte activation  
+- Cytokine production (e.g., TNF signaling)  
+- Leukocyte-mediated cytotoxicity  
+
+**Interpretation**:  
+Sporadic BD-II cases show strong upregulation of immune-related genes, suggesting a more **inflammation-driven pathology**.
+
+**Key Genes**:  
+`C1QB`, `CD300LF`, `CD84`, `CD84-AS1`, `CD180` — all involved in immune regulation, complement activation, and immune cell signaling.
+
+**Implication**:  
+These immune signatures highlight **immune dysfunction as a potential biomarker** in SBD, and point to **anti-inflammatory pathways** as promising therapeutic targets.
+
+---
+
+### FBD-Specific Alterations
+
+**Enriched Biological Processes**:
+
+- Embryonic skeletal and limb development  
+- Tissue morphogenesis  
+- Cell adhesion and extracellular matrix remodeling  
+
+**Interpretation**:  
+Familial BD-II is characterized by alterations in **neurodevelopmental and structural pathways**, indicating possible inherited disruptions in brain development and morphogenesis.
+
+**Key Genes**:  
+`LEFTY1`, `COL15A1`, `DCN`, `DDR1`, `CILP` — linked to TGF-beta signaling, ECM structure, and morphogenesis.
+
+**Implication**:  
+FBD may reflect a more **neurodevelopmental etiology**, pointing to early-life pathways and **developmental biomarkers** as subtype-specific features.
+
+---
+
+## 🔍 Summary of Insights
+
+| Feature                  | SBD                          | FBD                             | Shared                          |
+|--------------------------|------------------------------|--------------------------------|--------------------------------|
+| **Main Theme**           | Immune Dysfunction           | Neurodevelopmental Disruption   | Synaptic & Immune Core          |
+| **GO Enrichment**        | TNF, cytotoxicity, cytokines | Morphogenesis, development      | Synaptic pruning, cytokine      |
+| **Biomarker Candidates** | C1QB, CD300LF, CD84          | LEFTY1, DCN, COL15A1            | SPI1, P2RY13, HLA-A             |
+| **Therapeutic Implications** | Immune modulation        | Developmental pathway targeting | Shared synaptic/immune targets  |
+
+---
+
+### Key Takeaways
+
+- **BD-II exhibits both shared and subtype-specific gene expression patterns**, supporting its biological heterogeneity.  
+- **Sporadic cases (SBD)** show signatures of **inflammation and immune activation**.  
+- **Familial cases (FBD)** highlight **neurodevelopmental remodeling and morphogenesis pathways**.  
+- Shared pathways like **synapse pruning and dopaminergic signaling** offer universal targets for BD-II, while **distinct DEGs** point to the need for **personalized therapeutic strategies**.  
+- These findings can inform future **functional validation, drug development, and biomarker discovery** efforts.
+
+---
+
+
+
 
 
 
