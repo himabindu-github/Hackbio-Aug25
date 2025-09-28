@@ -123,6 +123,54 @@ fastqc "$INPUT_DIR"/*.fastq.gz -o "$OUTPUT_DIR_FASTQC"
 echo "FastQC completed. Reports saved to: $OUTPUT_DIR_FASTQC"
 
 ```
+```
+#!/bin/bash
+# ================================
+# FASTP TRIMMING PIPELINE SCRIPT
+# ================================
 
+# Set paths to your directories
+BASE_DIR="/home/maa/himabindu/Hackbio-Aug25/Stage2/bipolar_rnaseq"
+INPUT_DIR="$BASE_DIR/data/raw"
+OUTPUT_DIR="$BASE_DIR/data/trimmed"
+REPORT_DIR="$BASE_DIR/reports/fastp"
+
+# Create output directories if they don't exist
+mkdir -p "$OUTPUT_DIR"
+mkdir -p "$REPORT_DIR"
+
+# Number of threads to use
+THREADS=4
+
+echo "Starting fastp quality trimming for paired-end FASTQ files..."
+
+# Loop through all forward reads in INPUT_DIR
+for R1 in "$INPUT_DIR"/*_1.fastq.gz; do
+    # Derive the reverse read filename by replacing _1.fastq.gz with _2.fastq.gz
+    R2="${R1/_1.fastq.gz/_2.fastq.gz}"
+
+    # Extract sample name from filename
+    SAMPLE=$(basename "$R1" _1.fastq.gz)
+
+    echo "Processing sample: $SAMPLE"
+
+    # Run fastp with recommended parameters
+    fastp \
+        -i "$R1" \
+        -I "$R2" \
+        -o "$OUTPUT_DIR/${SAMPLE}_1.trimmed.fastq.gz" \
+        -O "$OUTPUT_DIR/${SAMPLE}_2.trimmed.fastq.gz" \
+        --detect_adapter_for_pe \
+        --thread "$THREADS" \
+        -h "$REPORT_DIR/${SAMPLE}_fastp.html" \
+        -j "$REPORT_DIR/${SAMPLE}_fastp.json"
+
+    echo "Finished trimming: $SAMPLE"
+done
+
+echo "All samples processed. Trimmed files in: $OUTPUT_DIR"
+echo "Fastp reports saved to: $REPORT_DIR"
+
+```
 
 
