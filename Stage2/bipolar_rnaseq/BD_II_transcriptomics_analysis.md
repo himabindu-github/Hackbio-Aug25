@@ -1282,6 +1282,105 @@ synaptic_terms_fbd <- ego_fbd_unique[grep(neuro_keywords, ego_fbd_unique$Descrip
 synaptic_terms_shared <- ego_shared[grep(neuro_keywords, ego_shared$Description, ignore.case = TRUE), ]
 
 ```
+---
+### Transcriptional Program Analysis in BD-II: Shared and Distinct Pathways
+
+
+As part of our **integrative transcriptomic analysis**, we aimed to dissect the **shared** and **distinct** transcriptional programs between **sporadic BD (SBD)** and **familial BD (FBD)**. By comparing DEGs (Differentially Expressed Genes) between:
+
+- **SBD vs SHC** (sporadic cases vs healthy controls),
+- **FBD vs FHC** (familial cases vs healthy controls),
+- **SBD vs FBD** (direct case-case comparison),
+
+we identified **shared** and **unique DEGs** and subjected each group to **GO Biological Process enrichment**.
+
+#### What does this tell us?
+
+This analysis helps:
+- Reveal **common molecular mechanisms** underlying BD-II across sporadic and familial forms.
+- Highlight **pathway-specific dysregulation**, such as immune activation in SBD vs neurodevelopmental alterations in FBD.
+- Provide **candidate biological targets** for future validation or therapeutic exploration.
+
+---
+
+# Transcriptional Program Summary and Functional Enrichment in BD-II
+
+This section summarizes the distinct transcriptional programs enriched in **Shared**, **SBD-specific**, and **FBD-specific** differentially expressed genes (DEGs) based on GO Biological Process enrichment. We also visualize gene-pathway relationships using **cnetplots**.
+
+---
+
+## Transcriptional Program Summary Table
+
+```r
+# ----------------------------------------------
+# Create a summary table of enriched programs
+# ----------------------------------------------
+
+transcriptional_summary <- data.frame(
+  DEG_Group = c("Shared DEGs", "SBD-Specific DEGs", "FBD-Specific DEGs"),
+  
+  Enriched_Programs = c(
+    paste("• Synapse pruning",
+          "• Dopaminergic neuron differentiation",
+          "• Cytokine-mediated signaling",
+          "• Reproductive system development", sep = "\n"),
+    
+    paste("• Leukocyte activation",
+          "• Cytokine production (TNF)",
+          "• Leukocyte-mediated cytotoxicity",
+          "• Minimal synaptic terms (synapse pruning)", sep = "\n"),
+    
+    paste("• Embryonic skeletal and limb development",
+          "• Tissue morphogenesis",
+          "• No immune terms enriched", sep = "\n")
+  ),
+  
+  Functional_Category = c(
+    "Neuroplasticity & Core BD-II Pathophysiology",
+    "Immune Dysfunction & Inflammation",
+    "Neurodevelopmental Alteration"
+  )
+)
+
+# Print table in R console
+print(transcriptional_summary)
+
+# Save the summary as CSV
+write.csv(transcriptional_summary, "transcriptional_program_summary.csv", row.names = FALSE)
+```
+---
+
+# Cnetplot for Shared DEGs - top 10 GO terms
+
+```
+library(enrichplot)
+
+cnetplot(ego_shared, 
+         circular = TRUE, 
+         colorEdge = TRUE, 
+         showCategory = 10,
+         title = "Shared DEGs: GO Biological Process")
+
+
+# Cnetplot for SBD-specific DEGs
+
+
+cnetplot(ego_sbd_unique, 
+         circular = TRUE, 
+         colorEdge = TRUE, 
+         showCategory = 10,
+         title = "SBD-specific DEGs: GO Biological Process")
+
+
+# Cnetplot for FBD-specific DEGs
+
+
+cnetplot(ego_fbd_unique, 
+         circular = TRUE, 
+         colorEdge = TRUE, 
+         showCategory = 10,
+         title = "FBD-specific DEGs: GO Biological Process")
+```
 
 
 
