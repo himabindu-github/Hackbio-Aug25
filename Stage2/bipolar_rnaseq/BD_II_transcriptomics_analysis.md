@@ -1014,7 +1014,8 @@ The dot plot for SBD vs SHC comparison reveals that biological processes such as
 
 This suggests that immune-related functions are significantly involved in the differences between these two conditions, highlighting the potential role of immune system activity and cell interactions in the underlying biological mechanisms.
 
-
+![Dot Plots](results/figures/go_fbd_fhc_bar.png)
+![Dot Plots](results/figures/go_sbd_fbd_bar.png)
 
 
 
