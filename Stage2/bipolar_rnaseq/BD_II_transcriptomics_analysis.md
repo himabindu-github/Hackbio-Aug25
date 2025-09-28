@@ -680,6 +680,18 @@ _Repeat for FBD vs FHC and SBD vs FBD._
 ---
 ![Volcano Plots](results/figures/sbd_shc_volcano.png)
 
+### Volcano Plot Interpretation: SBD vs SHC
+
+The volcano plot displays the results of differential expression analysis comparing SBD to SHC:
+
+- Each point represents a gene, plotted by its log2 fold change (x-axis) and the statistical significance as -log10 adjusted p-value (y-axis).
+- Genes colored **red** are significantly **upregulated** in SBD compared to SHC, with large positive fold changes and adjusted p-values below 0.1.
+- Genes colored **blue** are significantly **downregulated** in SBD compared to SHC, with large negative fold changes and adjusted p-values below 0.1.
+- Gray points represent genes without significant differential expression.
+- The dashed vertical lines at ±1 on the x-axis denote the fold change threshold, while the dashed horizontal line marks the adjusted p-value cutoff.
+- This plot helps identify genes with both biologically meaningful changes (fold change) and statistical significance, highlighting candidates potentially involved in disease pathology.
+
+
 ---
 
 ### 8. Heatmaps of DEGs
