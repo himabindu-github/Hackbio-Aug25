@@ -678,6 +678,9 @@ ggplot(res_df_s, aes(x = log2FoldChange, y = -log10(padj), color = sig)) +
 _Repeat for FBD vs FHC and SBD vs FBD._
 
 ---
+![Volcano Plots](results/figures/sbd_shc_volcano.pdf)
+
+---
 
 ### 8. Heatmaps of DEGs
 
