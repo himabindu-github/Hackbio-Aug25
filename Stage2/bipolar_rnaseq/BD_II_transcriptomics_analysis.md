@@ -1381,7 +1381,7 @@ cnetplot(ego_fbd_unique,
          showCategory = 10,
          title = "FBD-specific DEGs: GO Biological Process")
 ```
-
+![cnet plot](results/figures/cen_shared.png)
 
 
 
