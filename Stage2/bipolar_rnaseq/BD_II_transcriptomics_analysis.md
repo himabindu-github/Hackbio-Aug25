@@ -349,9 +349,9 @@ echo "All samples processed."
 
 For each sample, STAR produces:
 
-- Sorted BAM file: `${sample}_Aligned.sortedByCoord.out.bam`
-- Alignment summary: `${sample}_Log.final.out`
-- Splice junctions: `${sample}_SJ.out.tab`
+- Sorted BAM file
+- Alignment summary
+- Splice junctions
 
 ---
 
