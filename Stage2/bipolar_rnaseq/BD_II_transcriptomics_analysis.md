@@ -610,6 +610,7 @@ cor.test(age, pca_res$x[, 2])
 This PCA plot visualizes how samples cluster by their gene expression profiles, helping to identify patterns or batch effects related to experimental conditions.
 
 ![PCA Plot of Samples](results/figures/pca_plot.png)
+![PCA Plot of Samples](results/figures/pca_age.png)
 
 ---
 ####  PCA Summary
