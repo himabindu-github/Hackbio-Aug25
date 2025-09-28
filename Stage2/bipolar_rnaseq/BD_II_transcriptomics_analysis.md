@@ -942,8 +942,69 @@ relevant_kegg_sbd_fbd <- df_kegg_sbd_fbd[grep(filter_keywords, df_kegg_sbd_fbd$D
 # Print filtered KEGG pathways for SBD vs SHC comparison
 print(relevant_kegg_sbd_shc)
 
+```
+### Visualize GO and KEGG Enrichment Results
+
+Before interpreting the biological significance of the differentially expressed genes (DEGs), it is important to understand which biological processes and pathways are enriched in each comparison. 
+
+Gene Ontology (GO) enrichment reveals overrepresented biological processes associated with the DEGs, while KEGG pathway analysis identifies relevant signaling and metabolic pathways.
+
+Visualizing these enrichments with dotplots and barplots helps summarize the key functional categories and pathways that may drive the observed differences between conditions, providing biological insights into the dataset.
+
+```r
 
 
+### Visualize GO Biological Process (BP) enrichment results
+
+# 1. SBD vs SHC comparison
+# Dotplot showing top 10 enriched GO BP terms
+dotplot(ego_sbd_shc, showCategory = 10) + 
+  ggtitle("Top 10 Enriched GO Biological Processes SBD vs SHC")
+
+# Barplot showing top 10 enriched GO BP terms
+barplot(ego_sbd_shc, showCategory = 10) + 
+  ggtitle("Top 10 Enriched GO Biological Processes SBD vs SHC")
+
+# 2. FBD vs FHC comparison
+dotplot(ego_fbd_fhc, showCategory = 10) + 
+  ggtitle("Top 10 Enriched GO Biological Processes FBD vs FHC")
+
+barplot(ego_fbd_fhc, showCategory = 10) + 
+  ggtitle("Top 10 Enriched GO Biological Processes FBD vs FHC")
+
+# 3. SBD vs FBD comparison
+dotplot(ego_sbd_fbd, showCategory = 10) + 
+  ggtitle("Top 10 Enriched GO Biological Processes SBD vs FBD")
+
+barplot(ego_sbd_fbd, showCategory = 10) + 
+  ggtitle("Top 10 Enriched GO Biological Processes SBD vs FBD")
+
+
+### Visualize KEGG pathway enrichment results
+
+# 1. SBD vs SHC comparison
+dotplot(ekegg_sbd_shc, showCategory = 10) + 
+  ggtitle("Top 10 Enriched KEGG Pathways SBD vs SHC")
+
+barplot(ekegg_sbd_shc, showCategory = 10) + 
+  ggtitle("Top 10 Enriched KEGG Pathways SBD vs SHC")
+
+# 2. FBD vs FHC comparison
+dotplot(ekegg_fbd_fhc, showCategory = 10) + 
+  ggtitle("Top 10 Enriched KEGG Pathways FBD vs FHC")
+
+barplot(ekegg_fbd_fhc, showCategory = 10) + 
+  ggtitle("Top 10 Enriched KEGG Pathways FBD vs FHC")
+
+# 3. SBD vs FBD comparison
+dotplot(ekegg_sbd_fbd, showCategory = 10) + 
+  ggtitle("Top 10 Enriched KEGG Pathways SBD vs FBD")
+
+barplot(ekegg_sbd_fbd, showCategory = 10) + 
+  ggtitle("Top 10 Enriched KEGG Pathways SBD vs FBD")
+
+
+```
 
 
 
