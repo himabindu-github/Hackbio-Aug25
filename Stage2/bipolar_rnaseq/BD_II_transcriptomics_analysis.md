@@ -640,42 +640,59 @@ This PCA plot visualizes how samples cluster by their gene expression profiles, 
 PC2 likely captures **age-related gene expression variation**, suggesting **age may be a confounding factor**. Further modeling including age as a covariate is recommended.
 
 ---
-###  7. Volcano Plots
+###  7. Compare DEs - Volcano Plots
 
-#### a. SBD vs SHC
-
-```r
-# After exploring overall sample variation with PCA, 
-# we perform differential expression analysis to identify genes that are significantly up- or downregulated between SBD and SHC conditions.
-# This volcano plot visualizes the relationship between fold change and statistical significance for each gene.
-
-# Convert DESeq2 results to a data frame and add gene names as a column
-res_df_s <- as.data.frame(res_sbd_shc) %>%
-  mutate(gene = rownames(.)) %>%
+```
+# Function to process DESeq2 results into a tidy dataframe
+process_deseq_results <- function(res_df, padj_cutoff = 0.1, log2fc_cutoff = 1) {
+  df <- as.data.frame(res_df)             # Convert DESeq2 result object to data frame
+  df$gene <- rownames(df)                 # Add gene names as a new column
   
-  # Remove rows with NA adjusted p-values
-  filter(!is.na(padj)) %>%
+  df <- df %>%
+    filter(!is.na(padj)) %>%              # Remove rows where adjusted p-value is NA
+    mutate(
+      # Label each gene based on significance thresholds
+      sig = case_when(
+        padj < padj_cutoff & log2FoldChange > log2fc_cutoff ~ "Upregulated",
+        padj < padj_cutoff & log2FoldChange < -log2fc_cutoff ~ "Downregulated",
+        TRUE ~ "Not significant"
+      )
+    )
   
-  # Create a new column 'sig' to classify genes as Upregulated, Downregulated, or Not significant
-  mutate(sig = case_when(
-    padj < 0.1 & log2FoldChange > 1  ~ "Upregulated",    # Significant upregulated genes
-    padj < 0.1 & log2FoldChange < -1 ~ "Downregulated",  # Significant downregulated genes
-    TRUE                            ~ "Not significant"   # All others
-  ))
+  return(df)
+}
 
-# Generate a volcano plot using ggplot2
-ggplot(res_df_s, aes(x = log2FoldChange, y = -log10(padj), color = sig)) +
-  geom_point(alpha = 0.7, size = 1.8) +                          # Scatter plot points with transparency and size
-  geom_vline(xintercept = c(-1, 1), linetype = "dashed") +       # Vertical dashed lines at log2FC = -1 and 1
-  geom_hline(yintercept = -log10(0.1), linetype = "dashed") +    # Horizontal dashed line at adjusted p-value = 0.1
-  scale_color_manual(values = c("Upregulated" = "red",           # Color scheme for significance
-                                "Downregulated" = "blue",
-                                "Not significant" = "gray")) +
-  theme_minimal() +                                               # Clean minimal theme
-  labs(title = "Volcano Plot: SBD vs SHC")                       # Plot title
+# Function to extract top N significant genes by smallest adjusted p-value
+get_top_genes <- function(df, top_n = 20) {
+  ordered_indices <- order(df$padj)       # Order by padj ascending
+  top_genes <- df[ordered_indices[1:top_n], ]  # Select top N genes
+  return(top_genes)
+}
+
+# Function to create a volcano plot from processed DESeq2 results
+plot_volcano <- function(df, title, 
+                         colors = c("Upregulated" = "red", 
+                                    "Downregulated" = "blue", 
+                                    "Not significant" = "gray")) {
+  
+  ggplot(df, aes(x = log2FoldChange, y = -log10(padj), color = sig)) +
+    geom_point(alpha = 0.7, size = 1.8) +                      # Scatter plot points with transparency
+    geom_vline(xintercept = c(-1, 1), linetype = "dashed", color = "black") +  # Threshold lines for FC
+    geom_hline(yintercept = -log10(0.1), linetype = "dashed", color = "black") + # Significance cutoff line
+    scale_color_manual(values = colors) +                       # Custom colors for significance categories
+    theme_minimal(base_size = 13) +                             # Clean minimal theme with larger font
+    labs(
+      title = title,
+      x = "Log2 Fold Change",
+      y = "-Log10 Adjusted p-value",
+      color = "Regulation"
+    ) +
+    theme(legend.position = "top")                              # Place legend on top
+}
+
 ```
 
-_Repeat for FBD vs FHC and SBD vs FBD._
+
 
 ---
 ![Volcano Plots](results/figures/sbd_shc_volcano.png)
