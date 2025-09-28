@@ -460,21 +460,25 @@ head(count_data)
 ### 3. Define Sample Metadata
 
 ```r
+# Create metadata dataframe for all samples
 metadata <- data.frame(
   SampleID = c("SRR33243164", "SRR33243165", "SRR33243166", "SRR33243167",
                "SRR33243168", "SRR33243169", "SRR33243170", "SRR33243171"),
-  Condition = c("SBD", "SBD", "FBD", "FBD", "SHC", "SHC", "FHC", "FHC")
+  Condition = c("SBD", "SBD", "FBD", "FBD", "SHC", "SHC", "FHC", "FHC")  # Assign condition labels
 )
 
-# Match order
+# Reorder metadata rows to match the column order of the count data
 metadata <- metadata[match(colnames(count_data), metadata$SampleID), ]
+
+# Check that metadata and count data columns are now aligned (should return TRUE)
 stopifnot(all(metadata$SampleID == colnames(count_data)))
 
-# Define colData for DESeq2
+# Define colData to be used in DESeq2 object
 colData <- data.frame(
-  sample = colnames(count_data),
-  condition = factor(metadata$Condition, levels = c("SHC", "SBD", "FBD", "FHC"))
+  sample = colnames(count_data),  # Sample names from count matrix
+  condition = factor(metadata$Condition, levels = c("SHC", "SBD", "FBD", "FHC"))  # Set condition factor with desired order
 )
+
 ```
 
 ---
