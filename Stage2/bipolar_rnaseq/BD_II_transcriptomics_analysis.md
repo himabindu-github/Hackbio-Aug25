@@ -1007,6 +1007,8 @@ barplot(ekegg_sbd_fbd, showCategory = 10) +
 ```
 ![Dot Plots](results/figures/go_sbd_shc_dot.png)
 ![Dot Plots](results/figures/go_sbd_shc_bar.png)
+![Dot Plots](results/figures/go_fbd_fhc_dot.png)
+![Dot Plots](results/figures/go_sbd_fbd_bar.png)
 
 #### Interpretation :
 
@@ -1014,8 +1016,11 @@ The dot plot for SBD vs SHC comparison reveals that biological processes such as
 
 This suggests that immune-related functions are significantly involved in the differences between these two conditions, highlighting the potential role of immune system activity and cell interactions in the underlying biological mechanisms.
 
-![Dot Plots](results/figures/go_fbd_fhc_dot.png)
-![Dot Plots](results/figures/go_sbd_fbd_bar.png)
+
+- In the **SBD vs FBD** dot plot, processes related to **leukocyte mediated immunity**, **cytotoxicity**, and **leukocyte cell-cell adhesion** are highly enriched. This indicates a strong involvement of immune system activities and cell interaction pathways differentiating these two conditions.
+
+- In the **FBD vs FHC** dot plot, enrichment is observed predominantly in **morphogenesis-related** biological processes, suggesting developmental and structural changes may be key factors distinguishing these groups.
+
 
 
 
