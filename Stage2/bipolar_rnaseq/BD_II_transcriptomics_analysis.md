@@ -259,6 +259,104 @@ echo "STAR indexing completed!"
 ---
 
 > Next: Proceed to read alignment using STAR and quantify gene expression using **featureCounts**.
+## Module 3: Read Alignment to Reference Genome
+
+After preparing the STAR index, the next step involves aligning the **trimmed paired-end RNA-seq reads** to the human reference genome. STAR (Spliced Transcripts Alignment to a Reference) was used for its speed and splice-aware alignment capabilities.
+
+---
+
+###  Objectives
+
+- Align each sample to the GRCh38 reference genome using **STAR**.
+- Generate **sorted BAM files** and alignments annotated with all SAM attributes.
+- Verify successful alignment of all reads.
+
+---
+
+### Script: STAR Alignment of Trimmed Reads
+
+The following Bash script automates the alignment of all paired-end FASTQ files from the trimmed dataset:
+
+```bash
+#!/bin/bash
+
+# STAR Alignment Script for paired-end RNA-seq reads
+# Aligns trimmed fastq.gz files to a pre-built STAR genome index
+# Outputs sorted BAM and gene counts
+
+# Variables
+BASE_DIR="/home/maa/himabindu/Hackbio-Aug25/Stage2/bipolar_rnaseq"
+FASTQ_DIR="$BASE_DIR/data/trimmed"        # Location of trimmed fastq.gz files
+STAR_INDEX_DIR="$BASE_DIR/reference/STAR_index"
+OUTPUT_DIR="$BASE_DIR/STAR_alignment_output"
+THREADS=6
+
+# Create output directory if it doesn't exist
+mkdir -p "$OUTPUT_DIR"
+
+# Check if STAR index directory exists
+if [ ! -d "$STAR_INDEX_DIR" ]; then
+    echo "Error: STAR index directory not found at $STAR_INDEX_DIR"
+    echo "Please build the STAR index first."
+    exit 1
+fi
+
+# Check if fastq files exist
+if [ ! "$(ls $FASTQ_DIR/*_1.trimmed.fastq.gz 2>/dev/null)" ]; then
+    echo "Error: No R1 trimmed fastq.gz files found in $FASTQ_DIR"
+    exit 1
+fi
+
+# Loop through all R1 reads
+for r1 in "$FASTQ_DIR"/*_1.trimmed.fastq.gz; do
+    sample=$(basename "$r1" | sed 's/_1\.trimmed\.fastq\.gz//')
+    r2="$FASTQ_DIR/${sample}_2.trimmed.fastq.gz"
+
+    # Check if paired R2 exists
+    if [ ! -f "$r2" ]; then
+        echo "Warning: Paired file for $sample not found, skipping sample."
+        continue
+    fi
+
+    echo "Starting alignment for sample: $sample"
+
+    # Define output prefix and output directory per sample
+    SAMPLE_OUT_PREFIX="$OUTPUT_DIR/${sample}_"
+    
+    # Run STAR alignment
+    STAR --runThreadN $THREADS \
+         --genomeDir "$STAR_INDEX_DIR" \
+         --readFilesIn "$r1" "$r2" \
+         --readFilesCommand zcat \
+         --outFileNamePrefix "$SAMPLE_OUT_PREFIX" \
+         --outSAMtype BAM SortedByCoordinate \
+         --outSAMattributes All
+
+    if [ $? -eq 0 ]; then
+        echo "Alignment completed successfully for $sample"
+    else
+        echo "Error during alignment of $sample"
+    fi
+
+done
+
+echo "All samples processed."
+```
+
+---
+
+### Output Files per Sample
+
+For each sample, STAR produces:
+
+- Sorted BAM file: `${sample}_Aligned.sortedByCoord.out.bam`
+- Alignment summary: `${sample}_Log.final.out`
+- Splice junctions: `${sample}_SJ.out.tab`
+
+---
+
+> Next: Proceed to **quantify gene expression** using `featureCounts` to generate count matrices.
+
 
 
 
