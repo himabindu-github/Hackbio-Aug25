@@ -676,16 +676,27 @@ _Repeat for FBD vs FHC and SBD vs FBD._
 #### a. SBD vs SHC
 
 ```r
+# Following the volcano plot, we focus on the significantly differentially expressed genes (DEGs)
+# between SBD and SHC for further exploration of expression patterns across samples.
+
+# Filter DEGs based on adjusted p-value and log2 fold change thresholds
 deg_sbd_shc <- res_sbd_shc %>% as.data.frame() %>%
   filter(padj < 0.1 & abs(log2FoldChange) > 1)
 
+# Extract gene names of DEGs
 deg_genes <- rownames(deg_sbd_shc)
+
+# Get normalized counts from DESeq2 object and log-transform them for visualization
 norm_counts <- counts(dds, normalized = TRUE)
 log_norm_counts_deg <- log2(norm_counts[deg_genes, ] + 1)
 
+# Create a sample annotation data frame for coloring columns by condition
 sample_annot <- as.data.frame(colData(dds)[, "condition", drop = FALSE])
 colnames(sample_annot) <- "Condition"
 
+# Plot heatmap of the log-transformed normalized counts of DEGs,
+# scaling by row to highlight relative expression differences across samples,
+# and clustering rows and columns by correlation distance
 pheatmap(log_norm_counts_deg,
          annotation_col = sample_annot,
          scale = "row",
