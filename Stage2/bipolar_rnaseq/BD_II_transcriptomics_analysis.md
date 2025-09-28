@@ -1006,6 +1006,7 @@ barplot(ekegg_sbd_fbd, showCategory = 10) +
 
 ```
 ![Dot Plots](results/figures/go_sbd_shc_dot.png)
+![Dot Plots](results/figures/go_sbd_shc_bar.png)
 
 
 
