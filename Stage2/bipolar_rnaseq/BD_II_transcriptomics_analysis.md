@@ -1282,6 +1282,8 @@ synaptic_terms_fbd <- ego_fbd_unique[grep(neuro_keywords, ego_fbd_unique$Descrip
 synaptic_terms_shared <- ego_shared[grep(neuro_keywords, ego_shared$Description, ignore.case = TRUE), ]
 
 ```
+
+
 ---
 ### Transcriptional Program Analysis in BD-II: Shared and Distinct Pathways
 
@@ -1349,6 +1351,8 @@ print(transcriptional_summary)
 write.csv(transcriptional_summary, "transcriptional_program_summary.csv", row.names = FALSE)
 ```
 ---
+
+![Summary](results/transcriptional_summary.png)
 
 # Cnetplot for Shared DEGs - top 10 GO terms
 
