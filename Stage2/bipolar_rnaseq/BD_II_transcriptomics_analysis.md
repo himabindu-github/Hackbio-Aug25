@@ -416,6 +416,229 @@ echo "featureCounts completed successfully."
 
 > Proceed to **Module 5: Differential Expression Analysis**.
 
+## Module 5: DESeq2 Differential Expression Analysis & Visualization Pipeline
+
+This document provides a full RNA-seq analysis workflow using **DESeq2**, including differential gene expression, PCA, volcano plots, and heatmaps.
+
+---
+
+### 1. Load Required Libraries
+
+```r
+library(tidyverse)
+library(DESeq2)
+library(ggplot2)
+library(pheatmap)
+library(factoextra)
+library(ggrepel)
+```
+
+---
+
+###  2. Load and Prepare Count Data
+
+```r
+# Load count matrix
+raw_counts <- read.delim("counts/counts.txt", header = TRUE)
+
+# Set gene IDs as row names
+rownames(raw_counts) <- raw_counts$Geneid
+
+# Select only count columns
+count_data <- raw_counts[, 7:ncol(raw_counts)]
+
+# Ensure numeric format
+count_data <- as.data.frame(lapply(count_data, as.numeric))
+rownames(count_data) <- raw_counts$Geneid
+
+# Preview
+head(count_data)
+```
+
+---
+
+### 3. Define Sample Metadata
+
+```r
+metadata <- data.frame(
+  SampleID = c("SRR33243164", "SRR33243165", "SRR33243166", "SRR33243167",
+               "SRR33243168", "SRR33243169", "SRR33243170", "SRR33243171"),
+  Condition = c("SBD", "SBD", "FBD", "FBD", "SHC", "SHC", "FHC", "FHC")
+)
+
+# Match order
+metadata <- metadata[match(colnames(count_data), metadata$SampleID), ]
+stopifnot(all(metadata$SampleID == colnames(count_data)))
+
+# Define colData for DESeq2
+colData <- data.frame(
+  sample = colnames(count_data),
+  condition = factor(metadata$Condition, levels = c("SHC", "SBD", "FBD", "FHC"))
+)
+```
+
+---
+
+### 4. Differential Expression Analysis (DESeq2)
+
+```r
+dds <- DESeqDataSetFromMatrix(countData = count_data, colData = colData, design = ~ condition)
+dds <- DESeq(dds)
+
+# Results
+res_sbd_shc <- results(dds, contrast = c("condition", "SBD", "SHC"))
+res_fbd_fhc <- results(dds, contrast = c("condition", "FBD", "FHC"))
+res_sbd_fbd <- results(dds, contrast = c("condition", "SBD", "FBD"))
+
+# Top DEGs
+head(res_sbd_shc[order(res_sbd_shc$padj), ])
+head(res_fbd_fhc[order(res_fbd_fhc$padj), ])
+head(res_sbd_fbd[order(res_sbd_fbd$padj), ])
+```
+
+---
+
+### 5. PCA Analysis
+
+```r
+vsd <- vst(dds, blind = FALSE)
+pca_res <- prcomp(t(assay(vsd)))
+
+# Variance explained
+summary(pca_res)
+
+# Test variation by condition
+condition <- colData(dds)$condition
+summary(aov(pca_res$x[,1] ~ condition))
+summary(aov(pca_res$x[,2] ~ condition))
+
+# Plot
+pcaData <- plotPCA(vsd, intgroup = "condition", returnData = TRUE)
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+
+ggplot(pcaData, aes(PC1, PC2, color = condition)) +
+  geom_point(size = 4) +
+  xlab(paste0("PC1: ", percentVar[1], "% variance")) +
+  ylab(paste0("PC2: ", percentVar[2], "% variance")) +
+  ggtitle("PCA of Samples") +
+  theme_minimal()
+```
+
+---
+
+###  6. PCA Colored by Age
+
+```r
+age <- c(33, 28, 36, 38, 24, 25, 45, 67)
+metadata <- data.frame(
+  Condition = colData(dds)$condition,
+  Age = age
+)
+
+fviz_pca_ind(pca_res,
+             geom.ind = "point",
+             col.ind = age,
+             addEllipses = FALSE,
+             legend.title = "Age",
+             repel = TRUE)
+
+# Correlations
+cor.test(age, pca_res$x[, 1])
+cor.test(age, pca_res$x[, 2])
+```
+
+---
+
+###  7. Volcano Plots
+
+#### a. SBD vs SHC
+
+```r
+res_df_s <- as.data.frame(res_sbd_shc) %>%
+  mutate(gene = rownames(.)) %>%
+  filter(!is.na(padj)) %>%
+  mutate(sig = case_when(
+    padj < 0.1 & log2FoldChange > 1 ~ "Upregulated",
+    padj < 0.1 & log2FoldChange < -1 ~ "Downregulated",
+    TRUE ~ "Not significant"
+  ))
+
+ggplot(res_df_s, aes(x = log2FoldChange, y = -log10(padj), color = sig)) +
+  geom_point(alpha = 0.7, size = 1.8) +
+  geom_vline(xintercept = c(-1, 1), linetype = "dashed") +
+  geom_hline(yintercept = -log10(0.1), linetype = "dashed") +
+  scale_color_manual(values = c("Upregulated" = "red", "Downregulated" = "blue", "Not significant" = "gray")) +
+  theme_minimal() +
+  labs(title = "Volcano Plot: SBD vs SHC")
+```
+
+_Repeat for FBD vs FHC and SBD vs FBD._
+
+---
+
+### 8. Heatmaps of DEGs
+
+#### a. SBD vs SHC
+
+```r
+deg_sbd_shc <- res_sbd_shc %>% as.data.frame() %>%
+  filter(padj < 0.1 & abs(log2FoldChange) > 1)
+
+deg_genes <- rownames(deg_sbd_shc)
+norm_counts <- counts(dds, normalized = TRUE)
+log_norm_counts_deg <- log2(norm_counts[deg_genes, ] + 1)
+
+sample_annot <- as.data.frame(colData(dds)[, "condition", drop = FALSE])
+colnames(sample_annot) <- "Condition"
+
+pheatmap(log_norm_counts_deg,
+         annotation_col = sample_annot,
+         scale = "row",
+         clustering_distance_rows = "correlation",
+         clustering_distance_cols = "correlation",
+         main = "Heatmap: SBD vs SHC DEGs")
+```
+
+#### b. FBD vs FHC
+
+_Repeat using `res_fbd_fhc`._
+
+---
+
+###  9. Combined Heatmap (SBD vs SHC & FBD vs FHC)
+
+```r
+# Extract DEGs
+deg_sbd_shc <- res_sbd_shc %>% as.data.frame() %>% filter(padj < 0.1 & abs(log2FoldChange) > 1)
+deg_fbd_fhc <- res_fbd_fhc %>% as.data.frame() %>% filter(padj < 0.1 & abs(log2FoldChange) > 1)
+
+combined_genes <- union(rownames(deg_sbd_shc), rownames(deg_fbd_fhc))
+
+# Log-normalized matrix
+norm_counts <- counts(dds, normalized = TRUE)
+log_deg_counts <- log2(norm_counts[combined_genes, ] + 1)
+
+# Rename columns
+colnames(log_deg_counts) <- c("SBD-1", "SBD-2", "FBD-1", "FBD-2", "SHC-1", "SHC-2", "FHC-1", "FHC-2")
+rownames(sample_annot) <- colnames(log_deg_counts)
+
+# Heatmap
+pheatmap(log_deg_counts,
+         annotation_col = sample_annot,
+         scale = "row",
+         clustering_distance_rows = "correlation",
+         clustering_distance_cols = "correlation",
+         main = "Combined Heatmap: SBD vs SHC & FBD vs FHC")
+```
+
+---
+
+## End of Pipeline
+
+
+
+
+
 
 
 
