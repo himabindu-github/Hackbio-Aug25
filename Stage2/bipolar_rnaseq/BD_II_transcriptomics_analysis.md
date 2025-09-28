@@ -691,8 +691,19 @@ plot_volcano <- function(df, title,
 }
 
 ```
+---
+### SBD vs SHC
+```
+# Process DESeq2 results
+res_df_s <- process_deseq_results(res_sbd_shc)
 
+# Extract and print top 20 significant genes
+top_genes_s <- get_top_genes(res_df_s)
+print(top_genes_s)
 
+# Plot volcano plot
+plot_volcano(res_df_s, "Volcano Plot: SBD vs SHC")
+```
 
 ---
 ![Volcano Plots](results/figures/sbd_shc_volcano.png)
@@ -707,10 +718,58 @@ The volcano plot displays the results of differential expression analysis compar
 - Gray points represent genes without significant differential expression.
 - The dashed vertical lines at ±1 on the x-axis denote the fold change threshold, while the dashed horizontal line marks the adjusted p-value cutoff.
 - This plot helps identify genes with both biologically meaningful changes (fold change) and statistical significance, highlighting candidates potentially involved in disease pathology.
-
-
 ---
 
+### FBD vs FHC
+```
+# Process DESeq2 results
+res_df_f <- process_deseq_results(res_fbd_fhc)
+
+# Extract and print top 20 significant genes
+top_genes_f <- get_top_genes(res_df_f)
+print(top_genes_f)
+
+# Plot volcano plot with custom colors
+plot_volcano(res_df_f, "Volcano Plot: FBD vs FHC",
+             colors = c("Upregulated" = "coral", 
+                        "Downregulated" = "cyan", 
+                        "Not significant" = "gray"))
+
+```
+---
+![Volcano Plots](results/figures/fbd_fhc_volcano.png)
+
+---
+### SBD vs FBD
+```
+# Process DESeq2 results
+res_df_f <- process_deseq_results(res_fbd_fhc)
+
+# Extract and print top 20 significant genes
+top_genes_f <- get_top_genes(res_df_f)
+print(top_genes_f)
+
+# Plot volcano plot with custom colors
+plot_volcano(res_df_f, "Volcano Plot: FBD vs FHC",
+             colors = c("Upregulated" = "coral", 
+                        "Downregulated" = "cyan", 
+                        "Not significant" = "gray"))
+```
+---
+![Volcano Plots](results/figures/sbd_fbd_volcano.png)
+
+---
+#### Interpretation:
+
+Several genes show consistent upregulation in the sporadic condition (SBD vs SHC) and familial condition (SBD vs FBD), but downregulation in familial vs healthy controls (FBD vs FHC). This suggests these genes may be critical in distinguishing sporadic from familial cases and may have contrasting roles in these contexts. This comparative analysis reveals overlapping and unique gene expression changes that help differentiate sporadic and familial forms of the disease. Genes showing consistent regulation across comparisons might represent shared pathological mechanisms, while uniquely regulated genes may pinpoint specific biological pathways or targets relevant to sporadic or familial disease etiology.
+
+Genes such as **C1QB, C1QC, CD300LF, CD84, CD84-AS1, and CD180** are predominantly upregulated in sporadic cases. These genes are involved in immune functions including complement activation, lymphocyte regulation, and immune cell signaling.
+
+Genes like **CILP, COL15A1, COL15A1-AS1, DCN, and DDR1_2** show altered expression in familial cases and are associated with extracellular matrix organization and tissue remodeling.
+
+Metabolic and signaling-related genes, including **CYP4F29P** and **CYTH4**, are specifically upregulated in sporadic disease, suggesting differences in lipid metabolism and intracellular signaling pathways.
+
+---
 ### 8. Heatmaps of DEGs
 
 #### a. SBD vs SHC
