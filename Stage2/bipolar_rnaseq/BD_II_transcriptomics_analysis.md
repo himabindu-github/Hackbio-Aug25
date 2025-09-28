@@ -605,6 +605,13 @@ cor.test(age, pca_res$x[, 2])
 ```
 
 ---
+### PCA Plot
+
+This PCA plot visualizes how samples cluster by their gene expression profiles, helping to identify patterns or batch effects related to experimental conditions.
+
+![PCA Plot of Samples](/Users/himabindukumdam/Documents/Documents/hackbio_bash/Hackbio-Aug25/Stage2/bipolar_rnaseq/results/pca_plot.pdf)
+
+---
 ####  PCA Summary
 
 - **Principal Component Analysis (PCA)** was conducted on variance-stabilized data to explore global gene expression patterns across sample groups (SBD, FBD, SHC, FHC).
