@@ -538,28 +538,40 @@ After running `DESeq(dds)`, it includes:
 ### 5. PCA Analysis
 
 ```r
+# Perform variance stabilizing transformation (VST) on the DESeqDataSet
 vsd <- vst(dds, blind = FALSE)
+
+# Perform Principal Component Analysis (PCA) on the transformed data
+# 'assay(vsd)' extracts the normalized expression matrix
+# 't()' transposes the matrix to have samples as rows
 pca_res <- prcomp(t(assay(vsd)))
 
-# Variance explained
+# Show the amount of variance explained by each principal component
 summary(pca_res)
 
-# Test variation by condition
+# Extract the condition information from sample metadata
 condition <- colData(dds)$condition
+
+# Test if PC1 scores differ significantly between conditions using ANOVA
 summary(aov(pca_res$x[,1] ~ condition))
+
+# Test if PC2 scores differ significantly between conditions using ANOVA
 summary(aov(pca_res$x[,2] ~ condition))
 
-# Plot
+# Generate PCA plot data, grouping samples by 'condition'
 pcaData <- plotPCA(vsd, intgroup = "condition", returnData = TRUE)
+
+# Calculate percentage variance explained for PC1 and PC2
 percentVar <- round(100 * attr(pcaData, "percentVar"))
 
+# Plot PCA with ggplot2, coloring points by condition
 ggplot(pcaData, aes(PC1, PC2, color = condition)) +
   geom_point(size = 4) +
   xlab(paste0("PC1: ", percentVar[1], "% variance")) +
   ylab(paste0("PC2: ", percentVar[2], "% variance")) +
   ggtitle("PCA of Samples") +
   theme_minimal()
-```
+
 
 ---
 
