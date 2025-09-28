@@ -1382,6 +1382,8 @@ cnetplot(ego_fbd_unique,
          title = "FBD-specific DEGs: GO Biological Process")
 ```
 ![cnet plot](results/figures/cen_shared.png)
+![cnet plot](results/figures/cen_sbd.png)
+![cnet plot](results/figures/cen_fbd.png)
 
 ###  Summary: Integrative Transcriptomic Insights in BD-II
 
