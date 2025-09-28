@@ -753,6 +753,19 @@ pheatmap(log_deg_counts,
 ---
 ![PCA Plot of Samples](results/figures/combined_heatmap.png)
 
+### Interpretation: Combined DEGs from SBD vs SHC and FBD vs FHC
+
+This heatmap visualizes the expression patterns of differentially expressed genes (DEGs) identified from the comparisons between SBD vs SHC and FBD vs FHC conditions.
+
+- The samples cluster distinctly by condition groups, indicating consistent differential expression patterns within each group.
+- Clear separation between SBD and SHC samples, as well as between FBD and FHC samples, suggests strong condition-specific gene expression differences.
+- The color gradient from blue to red represents low to high expression levels, respectively, with many genes showing consistent upregulation or downregulation within each condition.
+- Some overlap or transitional patterns may be observed between closely related conditions, indicating possible shared molecular mechanisms or biological pathways.
+- Overall, this combined heatmap highlights transcriptional differences across bipolar disorder and healthy control groups, supporting the validity of the identified DEGs.
+
+This visualization helps to confirm that the DEGs reflect meaningful biological variation linked to the conditions studied.
+
+
 
 ### 10. Functional Enrichment
 
