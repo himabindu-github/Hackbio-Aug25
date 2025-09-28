@@ -486,21 +486,54 @@ colData <- data.frame(
 ### 4. Differential Expression Analysis (DESeq2)
 
 ```r
-dds <- DESeqDataSetFromMatrix(countData = count_data, colData = colData, design = ~ condition)
-dds <- DESeq(dds)
+# Create a DESeq2 dataset object
+# 'dds' stands for "DESeqDataSet" — a special object that stores count data, sample info, and the experimental design
+dds <- DESeqDataSetFromMatrix(
+  countData = count_data,  # matrix of raw counts (genes x samples)
+  colData = colData,       # metadata: sample names and conditions
+  design = ~ condition     # model design formula: test differences based on 'condition'
+)
 
-# Results
+# Run the DESeq2 differential expression analysis
+dds <- DESeq(dds)
+```
+```
+# Extract results (DEGs) for each comparison of interest
+# This compares SBD vs SHC (e.g. sporadic bipolar vs healthy control)
 res_sbd_shc <- results(dds, contrast = c("condition", "SBD", "SHC"))
+
+# This compares FBD vs FHC (familial bipolar vs familial healthy control)
 res_fbd_fhc <- results(dds, contrast = c("condition", "FBD", "FHC"))
+
+# This compares SBD vs FBD (sporadic vs familial bipolar)
 res_sbd_fbd <- results(dds, contrast = c("condition", "SBD", "FBD"))
 
-# Top DEGs
-head(res_sbd_shc[order(res_sbd_shc$padj), ])
-head(res_fbd_fhc[order(res_fbd_fhc$padj), ])
-head(res_sbd_fbd[order(res_sbd_fbd$padj), ])
+
+```
+```
+# View the top differentially expressed genes (by adjusted p-value) for each comparison
+head(res_sbd_shc[order(res_sbd_shc$padj), ])  # Top genes: SBD vs SHC
+head(res_fbd_fhc[order(res_fbd_fhc$padj), ])  # Top genes: FBD vs FHC
+head(res_sbd_fbd[order(res_sbd_fbd$padj), ])  # Top genes: SBD vs FBD
 ```
 
 ---
+
+
+- `dds` stands for **DESeqDataSet**, the core object used by the DESeq2 package.
+
+It contains:
+
+- The raw count matrix.
+- The sample metadata.
+- The experimental design (i.e., how you want to compare groups).
+
+After running `DESeq(dds)`, it includes:
+
+- Size factor normalization
+- Dispersion estimation
+- Model fitting and statistical testing.
+
 
 ### 5. PCA Analysis
 
