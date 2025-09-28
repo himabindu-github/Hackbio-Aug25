@@ -201,6 +201,8 @@ Following quality control, clean reads were aligned to the human reference genom
 
 The following Bash script performs the full setup for STAR alignment:
 
+---
+
 ```
 #!/bin/bash
 
