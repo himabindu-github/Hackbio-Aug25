@@ -356,6 +356,65 @@ For each sample, STAR produces:
 ---
 
 > Next: Proceed to **quantify gene expression** using `featureCounts` to generate count matrices.
+## Module 4: Gene Expression Quantification
+
+Following successful alignment with STAR, this module focuses on **quantifying gene-level expression** using `featureCounts`, a high-performance read summarization tool.
+
+---
+
+### Objectives
+
+- Generate a **gene-level count matrix** from aligned BAM files.
+- Use the **GTF annotation** for accurate gene models (from GRCh38.p14).
+- Prepare expression data for downstream differential expression analysis.
+
+---
+
+### Script: featureCounts (Quantification)
+
+```bash
+#!/bin/bash
+
+# Exit immediately on error
+set -e
+
+# Paths
+BASE_DIR="/home/maa/himabindu/Hackbio-Aug25/Stage2/bipolar_rnaseq"
+ANNOTATION="$BASE_DIR/reference/GCF_000001405.40_GRCh38.p14_genomic.gtf"
+OUTPUT_DIR="$BASE_DIR/counts"
+BAM_DIR="$BASE_DIR/STAR_alignment_output"
+
+# Create output directory if it doesn't exist
+mkdir -p "$OUTPUT_DIR"
+
+# Debug info
+echo "Using annotation file: $ANNOTATION"
+echo "Looking for BAM files in: $BAM_DIR"
+ls "$BAM_DIR"/*_Aligned.sortedByCoord.out.bam || { echo "No BAM files found!"; exit 1; }
+
+# Run featureCounts
+CMD="featureCounts -T 4 -p -O -t gene -g gene_id -a \"$ANNOTATION\" -o \"$OUTPUT_DIR\"/counts.txt \"$BAM_DIR\"/*.bam"
+
+echo "Running command:"
+echo $CMD
+
+eval $CMD  
+
+echo "featureCounts completed successfully."
+```
+
+---
+
+###  Output
+
+- `counts.txt`: A matrix of **raw read counts per gene**, per sample.
+- `counts.txt.summary`: Summary of reads assigned and unassigned.
+- Counts are grouped using the `gene_id` field from the GTF annotation.
+- These counts will be **used in DESeq2** for normalization and statistical testing.
+
+---
+
+> Proceed to **Module 5: Differential Expression Analysis**.
 
 
 
