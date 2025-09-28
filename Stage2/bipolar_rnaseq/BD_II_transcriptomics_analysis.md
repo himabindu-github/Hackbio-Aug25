@@ -185,4 +185,75 @@ echo "Fastp reports saved to: $REPORT_DIR"
   - **Adapter contamination was low**, with **<1.5% adapter content** in all samples.
   - Over **99% of reads passed filtering (PF)** in every sample, demonstrating high sequencing quality.
 
+## ✅ Module 2: Alignment to Reference Genome
+
+Following quality control, clean reads were aligned to the human reference genome to facilitate accurate transcript quantification.
+
+### Objectives
+
+- Download the **GRCh38 reference genome** and corresponding annotation (GTF).
+- Build the **STAR index**.
+- Prepare data for alignment in the next module.
+
+
+
+### Script: Reference Genome Download & STAR Indexing
+
+The following Bash script performs the full setup for STAR alignment:
+
+```
+#!/bin/bash
+
+# Variables
+BASE_DIR="/home/maa/himabindu/Hackbio-Aug25/Stage2/bipolar_rnaseq"
+REF_DIR="$BASE_DIR/reference"
+STAR_INDEX_DIR="$REF_DIR/STAR_index"
+THREADS=8
+
+# Create directories
+mkdir -p "$REF_DIR"
+mkdir -p "$STAR_INDEX_DIR"
+
+# Move to reference directory
+cd "$REF_DIR"
+
+# Download genome fasta and gtf annotation
+echo "Downloading reference genome and annotation..."
+wget -c ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.fna.gz
+wget -c ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.gtf.gz
+
+# Unzip files
+echo "Unzipping reference files..."
+gunzip -f GCF_000001405.40_GRCh38.p14_genomic.fna.gz
+gunzip -f GCF_000001405.40_GRCh38.p14_genomic.gtf.gz
+
+# File paths
+GENOME_FA="$REF_DIR/GCF_000001405.40_GRCh38.p14_genomic.fna"
+GTF_FILE="$REF_DIR/GCF_000001405.40_GRCh38.p14_genomic.gtf"
+
+# Build STAR index
+echo "Building STAR index..."
+STAR --runThreadN $THREADS \
+     --runMode genomeGenerate \
+     --genomeDir "$STAR_INDEX_DIR" \
+     --genomeFastaFiles "$GENOME_FA" \
+     --sjdbGTFfile "$GTF_FILE" \
+     --sjdbOverhang 99
+
+echo "STAR indexing completed!"
+```
+
+---
+
+### Output
+
+- Downloaded reference genome: `GCF_000001405.40_GRCh38.p14_genomic.fna`
+- Annotation file: `GCF_000001405.40_GRCh38.p14_genomic.gtf`
+- STAR genome index created in: `reference/STAR_index/`
+
+---
+
+> Next: Proceed to read alignment using STAR and quantify gene expression using **featureCounts**.
+
+
 
