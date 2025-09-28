@@ -92,6 +92,37 @@ wget -nc -P "$OUTPUT_DIR" ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR332/069/SRR33243
 
 echo "Download complete. Files saved to: $OUTPUT_DIR"
 ```
+```
+#!/bin/bash
+
+# ============================================================
+# Script: run_fastqc.sh
+# Purpose: Run FastQC on raw FASTQ files
+# ============================================================
+
+# 1. CONFIGURATION
+BASE_DIR="/home/maa/himabindu/Hackbio-Aug25/Stage2/bipolar_rnaseq"
+INPUT_DIR="$BASE_DIR/data/raw"
+OUTPUT_DIR_FASTQC="$BASE_DIR/reports/qc_rawdata"
+
+# 2. CHECK & CREATE OUTPUT DIRECTORY
+echo "Creating FastQC output directory (if not present)..."
+mkdir -p "$OUTPUT_DIR_FASTQC"
+
+# 3. RUN FASTQC
+echo "Running FastQC on raw FASTQ files in: $INPUT_DIR"
+
+if [[ ! -d "$INPUT_DIR" ]]; then
+    echo "ERROR: Input directory '$INPUT_DIR' does not exist."
+    exit 1
+fi
+
+# Run FastQC on all fastq.gz files
+fastqc "$INPUT_DIR"/*.fastq.gz -o "$OUTPUT_DIR_FASTQC"
+
+echo "FastQC completed. Reports saved to: $OUTPUT_DIR_FASTQC"
+
+```
 
 
 
